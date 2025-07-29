@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Mon Emploi du Temps{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-calendar3 me-2"></i>Mon Emploi du Temps</h2>
+{% if schedules %}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Jour</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Matière</th>
+                <th>Salle</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sched in schedules %}
+            <tr>
+                <td>{{ sched.day_of_week }}</td>
+                <td>{{ sched.start_time.strftime('%H:%M') }}</td>
+                <td>{{ sched.end_time.strftime('%H:%M') }}</td>
+                <td>{{ sched.course.name }}</td>
+                <td>{{ sched.classroom }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted">Aucun emploi du temps disponible.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Notes{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-clipboard-data me-2"></i>Mes Notes</h2>
+{% if grades %}
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Matière</th>
+                <th>Note</th>
+                <th>Type</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in grades %}
+            <tr>
+                <td>{{ grade.course.name }}</td>
+                <td>
+                    <span class="badge bg-{{ 'success' if grade.grade_value >= 10 else 'danger' }}">
+                        {{ "%.1f"|format(grade.grade_value) }}/20
+                    </span>
+                </td>
+                <td>{{ grade.grade_type }}</td>
+                <td>{{ grade.date_recorded.strftime('%d/%m/%Y') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted">Aucune note enregistrée.</p>
+{% endif %}
+{% endblock %}
