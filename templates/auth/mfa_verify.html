@@ -24,8 +24,8 @@
                     
                     <div class="mb-3">
                         {{ form.code.label(class="form-label") }}
-                        {{ form.code(class="form-control form-control-lg text-center" + (" is-invalid" if form.code.errors else ""), 
-                                     placeholder="Entrez le code à 6 chiffres", maxlength="12", autocomplete="off") }}
+                            {{ form.code(class="form-control form-control-lg text-center" + (" is-invalid" if form.code.errors else ""),
+                                     placeholder="Entrez le code à 12 caractères", maxlength="12", autocomplete="off") }}
                         {% if form.code.errors %}
                             <div class="invalid-feedback">
                                 {% for error in form.code.errors %}
