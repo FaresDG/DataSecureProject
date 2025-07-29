@@ -12,10 +12,10 @@ def app():
     with app.app_context():
         db.create_all()
         
-        # Créer les rôles de base
+        # Create base roles
         roles = [
-            Role(name='student', description='Étudiant'),
-            Role(name='teacher', description='Professeur')
+            Role(name='student', description='Student'),
+            Role(name='teacher', description='Teacher')
         ]
         
         for role in roles:
@@ -29,7 +29,7 @@ def app():
 
 class TestModels:
     def test_user_creation(self, app):
-        """Test la création d'un utilisateur"""
+        """Test creating a user"""
         with app.app_context():
             student_role = Role.query.filter_by(name='student').first()
             
@@ -50,7 +50,7 @@ class TestModels:
             assert saved_user.check_password('password123') is True
 
     def test_student_creation(self, app):
-        """Test la création d'un profil étudiant"""
+        """Test creating a student profile"""
         with app.app_context():
             student_role = Role.query.filter_by(name='student').first()
             
@@ -79,7 +79,7 @@ class TestModels:
             assert saved_student.class_name == '6A'
 
     def test_teacher_creation(self, app):
-        """Test la création d'un profil professeur"""
+        """Test creating a teacher profile"""
         with app.app_context():
             teacher_role = Role.query.filter_by(name='teacher').first()
             
@@ -108,11 +108,11 @@ class TestModels:
             assert saved_teacher.department == 'Mathematics'
 
     def test_course_creation(self, app):
-        """Test la création d'un cours"""
+        """Test creating a course"""
         with app.app_context():
             teacher_role = Role.query.filter_by(name='teacher').first()
             
-            # Créer un professeur
+            # Create a teacher
             user = User(
                 email='teacher@example.com',
                 first_name='Alice',
@@ -132,7 +132,7 @@ class TestModels:
             db.session.add(teacher)
             db.session.commit()
             
-            # Créer un cours
+            # Create a course
             course = Course(
                 name='Physics 101',
                 code='PHY101',
@@ -149,13 +149,13 @@ class TestModels:
             assert saved_course.teacher.user.first_name == 'Alice'
 
     def test_grade_creation(self, app):
-        """Test la création d'une note"""
+        """Test creating a grade"""
         with app.app_context():
-            # Créer les rôles nécessaires
+            # Create required roles
             student_role = Role.query.filter_by(name='student').first()
             teacher_role = Role.query.filter_by(name='teacher').first()
             
-            # Créer un étudiant
+            # Create a student
             student_user = User(
                 email='student@example.com',
                 first_name='John',
@@ -175,7 +175,7 @@ class TestModels:
             db.session.add(student)
             db.session.commit()
             
-            # Créer un professeur
+            # Create a teacher
             teacher_user = User(
                 email='teacher@example.com',
                 first_name='Alice',
@@ -195,7 +195,7 @@ class TestModels:
             db.session.add(teacher)
             db.session.commit()
             
-            # Créer un cours
+            # Create a course
             course = Course(
                 name='Mathematics 101',
                 code='MATH101',
@@ -206,14 +206,14 @@ class TestModels:
             db.session.add(course)
             db.session.commit()
             
-            # Créer une note
+            # Create a grade
             grade = Grade(
                 student_id=student.id,
                 course_id=course.id,
                 grade_value=15.5,
-                grade_type='Contrôle',
+                grade_type='Test',
                 teacher_id=teacher.id,
-                comments='Bon travail'
+                comments='Good job'
             )
             db.session.add(grade)
             db.session.commit()
@@ -221,12 +221,12 @@ class TestModels:
             saved_grade = Grade.query.filter_by(student_id=student.id).first()
             assert saved_grade is not None
             assert saved_grade.grade_value == 15.5
-            assert saved_grade.grade_type == 'Contrôle'
+            assert saved_grade.grade_type == 'Test'
             assert saved_grade.student.user.first_name == 'John'
             assert saved_grade.course.name == 'Mathematics 101'
 
     def test_user_role_permissions(self, app):
-        """Test les permissions basées sur les rôles"""
+        """Test role-based permissions"""
         with app.app_context():
             student_role = Role.query.filter_by(name='student').first()
             teacher_role = Role.query.filter_by(name='teacher').first()
@@ -245,18 +245,18 @@ class TestModels:
                 role_id=teacher_role.id
             )
             
-            # Test permissions étudiants
+            # Test student permissions
             assert student_user.can('view_grades') is True
             assert student_user.can('add_grades') is False
             assert student_user.can('manage_users') is False
             
-            # Test permissions professeurs
+            # Test teacher permissions
             assert teacher_user.can('view_grades') is False
             assert teacher_user.can('add_grades') is True
             assert teacher_user.can('manage_users') is False
 
     def test_mfa_code_generation(self, app):
-        """Test la génération et vérification des codes MFA"""
+        """Test MFA code generation and verification"""
         with app.app_context():
             student_role = Role.query.filter_by(name='student').first()
             
@@ -269,13 +269,13 @@ class TestModels:
             db.session.add(user)
             db.session.commit()
             
-            # Générer un code MFA
+            # Generate an MFA code
             mfa_code = user.generate_mfa_code()
             
             assert mfa_code is not None
-            assert len(mfa_code) == 12  # 6 bytes en hex = 12 caractères
+            assert len(mfa_code) == 12  # 6 bytes in hex = 12 characters
             assert user.mfa_secret == mfa_code
             
-            # Vérifier le code
+            # Verify the code
             assert user.verify_mfa_code(mfa_code) is True
             assert user.verify_mfa_code('wrong_code') is False

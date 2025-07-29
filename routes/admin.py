@@ -7,7 +7,7 @@ from utils.admin import create_sample_data
 bp = Blueprint('admin', __name__)
 
 def admin_required(f):
-    """Décorateur pour vérifier que l'utilisateur est administrateur"""
+    """Decorator to ensure the user is an administrator"""
     def decorated_function(*args, **kwargs):
         if not current_user.has_role('admin'):
             return redirect(url_for('main.dashboard'))
@@ -19,7 +19,7 @@ def admin_required(f):
 @login_required
 @admin_required
 def dashboard():
-    # Statistiques générales
+    # Global statistics
     stats = {
         'total_users': User.query.count(),
         'total_students': Student.query.count(),
@@ -30,7 +30,7 @@ def dashboard():
         'total_absences': Absence.query.count()
     }
     
-    # Dernières activités
+    # Latest activity
     recent_users = User.query.order_by(User.created_at.desc()).limit(5).all()
     recent_grades = Grade.query.order_by(Grade.date_recorded.desc()).limit(5).all()
     
@@ -71,7 +71,7 @@ def add_user():
         db.session.add(user)
         db.session.commit()
         
-        flash('Utilisateur créé avec succès !', 'success')
+        flash('User created successfully!', 'success')
         return redirect(url_for('admin.users'))
     
     return render_template('admin/add_user.html', form=form)
@@ -96,7 +96,7 @@ def edit_user(user_id):
             user.set_password(form.password.data)
         
         db.session.commit()
-        flash('Utilisateur modifié avec succès !', 'success')
+        flash('User updated successfully!', 'success')
         return redirect(url_for('admin.users'))
     
     return render_template('admin/edit_user.html', form=form, user=user)
@@ -108,13 +108,13 @@ def delete_user(user_id):
     user = User.query.get_or_404(user_id)
     
     if user.id == current_user.id:
-        flash('Vous ne pouvez pas supprimer votre propre compte !', 'danger')
+        flash('You cannot delete your own account!', 'danger')
         return redirect(url_for('admin.users'))
     
     db.session.delete(user)
     db.session.commit()
     
-    flash('Utilisateur supprimé avec succès !', 'success')
+    flash('User deleted successfully!', 'success')
     return redirect(url_for('admin.users'))
 
 @bp.route('/courses')
@@ -144,7 +144,7 @@ def add_course():
         db.session.add(course)
         db.session.commit()
         
-        flash('Cours créé avec succès !', 'success')
+        flash('Course created successfully!', 'success')
         return redirect(url_for('admin.courses'))
     
     return render_template('admin/add_course.html', form=form)
@@ -153,11 +153,11 @@ def add_course():
 @login_required
 @admin_required
 def init_sample_data():
-    """Initialise des données d'exemple pour les tests"""
+    """Initialize sample data for testing"""
     try:
         create_sample_data()
-        flash('Données d\'exemple créées avec succès !', 'success')
+        flash('Sample data created successfully!', 'success')
     except Exception as e:
-        flash(f'Erreur lors de la création des données : {str(e)}', 'danger')
+        flash(f'Error creating sample data: {str(e)}', 'danger')
     
     return redirect(url_for('admin.dashboard'))

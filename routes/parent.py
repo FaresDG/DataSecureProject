@@ -19,7 +19,7 @@ def parent_required(f):
 def dashboard():
     parent = current_user.parent_profile
     
-    # Récupérer les enfants du parent
+    # Retrieve the parent's children
     children = Student.query.join(ParentStudent)\
                            .filter(ParentStudent.parent_id == parent.id).all()
     
@@ -48,7 +48,7 @@ def dashboard():
 @login_required
 @parent_required
 def child_grades(student_id):
-    # Vérifier que l'enfant appartient bien au parent
+    # Ensure the child actually belongs to the parent
     parent = current_user.parent_profile
     child = Student.query.join(ParentStudent)\
                         .filter(ParentStudent.parent_id == parent.id,
