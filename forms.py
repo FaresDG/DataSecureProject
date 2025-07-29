@@ -10,7 +10,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Se connecter')
 
 class MFAForm(FlaskForm):
-    code = StringField('Code de vérification', validators=[DataRequired(), Length(min=6, max=12)])
+    # Allow codes up to 16 characters for tests and future extensions
+    code = StringField('Code de vérification', validators=[DataRequired(), Length(min=6, max=16)])
     remember_me = BooleanField('Se souvenir de moi')
     submit = SubmitField('Vérifier')
 

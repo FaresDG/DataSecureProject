@@ -4,7 +4,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 import secrets
 
-db = SQLAlchemy()
+# Avoid attribute expiration on commit so objects can be accessed
+# outside the session in tests and background tasks
+db = SQLAlchemy(session_options={"expire_on_commit": False})
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -20,7 +22,7 @@ class User(UserMixin, db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False, default='')
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     phone = db.Column(db.String(20))
@@ -50,16 +52,27 @@ class User(UserMixin, db.Model):
         return self.mfa_secret == code
     
     def has_role(self, role_name):
-        return self.role.name == role_name
+        """Return True if the user has the given role."""
+        if self.role is not None:
+            return self.role.name == role_name
+        # When the relationship is not loaded, fall back to role_id comparison
+        role = Role.query.get(self.role_id) if self.role_id else None
+        return role.name == role_name if role else False
     
     def can(self, permission):
+        """Return True if the user's role grants the given permission."""
         permissions = {
             'student': ['view_grades', 'view_schedule', 'view_profile'],
             'parent': ['view_child_grades', 'view_child_schedule', 'view_child_absences'],
             'teacher': ['add_grades', 'mark_absences', 'view_classes', 'send_messages'],
             'admin': ['manage_users', 'manage_courses', 'manage_schedule', 'view_dashboard']
         }
-        return permission in permissions.get(self.role.name, [])
+        if self.role is None and self.role_id:
+            role = Role.query.get(self.role_id)
+            role_name = role.name if role else None
+        else:
+            role_name = self.role.name if self.role else None
+        return permission in permissions.get(role_name, [])
 
 class Student(db.Model):
     __tablename__ = 'students'
