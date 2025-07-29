@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for, session, current_app
 from flask_login import login_user, logout_user, current_user
-from flask_mail import Message, Mail
+from flask_mail import Message
 from werkzeug.security import generate_password_hash
 import secrets
 from datetime import datetime
@@ -10,7 +10,6 @@ from forms import LoginForm, MFAForm, RegisterForm
 from utils.security import log_auth_attempt
 
 bp = Blueprint('auth', __name__)
-mail = Mail()
 
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -120,8 +119,12 @@ Cordialement,
 L'équipe de l'intranet scolaire
             '''
         )
+        mail = current_app.extensions.get('mail')
+        if not mail:
+            current_app.logger.error('Flask-Mail not initialized')
+            return False
         mail.send(msg)
         return True
     except Exception as e:
-        print(f"Erreur envoi email MFA: {e}")
+        current_app.logger.error(f"Erreur envoi email MFA: {e}")
         return False
