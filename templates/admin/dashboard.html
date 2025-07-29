@@ -1,21 +1,21 @@
 {% extends "base.html" %}
 
-{% block title %}Tableau de bord Administrateur{% endblock %}
+{% block title %}Administrator Dashboard{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-gear-fill me-2"></i>Tableau de bord Administrateur</h2>
+    <h2><i class="bi bi-gear-fill me-2"></i>Administrator Dashboard</h2>
     <span class="badge bg-danger fs-6">Administration</span>
 </div>
 
-<!-- Statistiques globales -->
+<!-- Global statistics -->
 <div class="row mb-4">
     <div class="col-xl-3 col-md-6 mb-3">
         <div class="card bg-primary text-white">
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <h6 class="text-white-50">Total Utilisateurs</h6>
+                        <h6 class="text-white-50">Total Users</h6>
                         <h3 class="mb-0">{{ stats.total_users }}</h3>
                     </div>
                     <div class="flex-shrink-0">
@@ -31,7 +31,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <h6 class="text-white-50">Étudiants</h6>
+                        <h6 class="text-white-50">Students</h6>
                         <h3 class="mb-0">{{ stats.total_students }}</h3>
                     </div>
                     <div class="flex-shrink-0">
@@ -47,7 +47,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <h6 class="text-white-50">Professeurs</h6>
+                        <h6 class="text-white-50">Teachers</h6>
                         <h3 class="mb-0">{{ stats.total_teachers }}</h3>
                     </div>
                     <div class="flex-shrink-0">
@@ -63,7 +63,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
-                        <h6 class="text-white-50">Cours</h6>
+                        <h6 class="text-white-50">Courses</h6>
                         <h3 class="mb-0">{{ stats.total_courses }}</h3>
                     </div>
                     <div class="flex-shrink-0">
@@ -81,7 +81,7 @@
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0">
                     <i class="bi bi-person-plus me-2"></i>
-                    Utilisateurs récents
+                    Recent users
                 </h5>
             </div>
             <div class="card-body">
@@ -90,11 +90,11 @@
                         <table class="table table-sm">
                             <thead>
                                 <tr>
-                                    <th>Nom</th>
+                                    <th>Name</th>
                                     <th>Email</th>
-                                    <th>Rôle</th>
-                                    <th>Date création</th>
-                                    <th>Statut</th>
+                                    <th>Role</th>
+                                    <th>Created</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -117,7 +117,7 @@
                         </table>
                     </div>
                 {% else %}
-                    <p class="text-muted text-center py-3">Aucun utilisateur récent</p>
+                    <p class="text-muted text-center py-3">No recent users</p>
                 {% endif %}
             </div>
         </div>
@@ -128,26 +128,26 @@
             <div class="card-header bg-success text-white">
                 <h5 class="mb-0">
                     <i class="bi bi-lightning me-2"></i>
-                    Actions rapides
+                    Quick actions
                 </h5>
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2">
                     <a href="{{ url_for('admin.add_user') }}" class="btn btn-outline-primary">
                         <i class="bi bi-person-plus me-2"></i>
-                        Ajouter un utilisateur
+                        Add a user
                     </a>
                     <a href="{{ url_for('admin.add_course') }}" class="btn btn-outline-success">
                         <i class="bi bi-journal-plus me-2"></i>
-                        Créer un cours
+                        Create a course
                     </a>
                     <a href="{{ url_for('admin.users') }}" class="btn btn-outline-info">
                         <i class="bi bi-people me-2"></i>
-                        Gérer les utilisateurs
+                        Manage users
                     </a>
                     <a href="{{ url_for('admin.courses') }}" class="btn btn-outline-warning">
                         <i class="bi bi-book me-2"></i>
-                        Gérer les cours
+                        Manage courses
                     </a>
                 </div>
             </div>
@@ -157,33 +157,33 @@
             <div class="card-header bg-warning text-dark">
                 <h6 class="mb-0">
                     <i class="bi bi-tools me-2"></i>
-                    Outils de développement
+                    Development tools
                 </h6>
             </div>
             <div class="card-body">
                 <div class="d-grid">
                     <a href="{{ url_for('admin.init_sample_data') }}" class="btn btn-outline-warning btn-sm" 
-                       onclick="return confirm('Cela va créer des données d\'exemple. Continuer ?')">
+                       onclick="return confirm('This will create sample data. Continue?')">
                         <i class="bi bi-database-add me-2"></i>
-                        Initialiser données d'exemple
+                        Initialize sample data
                     </a>
                 </div>
                 <p class="text-muted small mt-2">
-                    Crée des utilisateurs, cours et données de test pour développement.
+                    Creates users, courses and test data for development purposes.
                 </p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Statistiques détaillées -->
+<!-- Detailed statistics -->
 <div class="row">
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="card-header bg-light">
                 <h5 class="mb-0">
                     <i class="bi bi-bar-chart me-2"></i>
-                    Statistiques détaillées
+                    Detailed statistics
                 </h5>
             </div>
             <div class="card-body">
@@ -194,11 +194,11 @@
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <h4 class="text-success">{{ stats.total_students }}</h4>
-                        <p class="text-muted small">Étudiants</p>
+                        <p class="text-muted small">Students</p>
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <h4 class="text-warning">{{ stats.total_teachers }}</h4>
-                        <p class="text-muted small">Professeurs</p>
+                        <p class="text-muted small">Teachers</p>
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <h4 class="text-info">{{ stats.total_parents }}</h4>
@@ -206,11 +206,11 @@
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <h4 class="text-secondary">{{ stats.total_courses }}</h4>
-                        <p class="text-muted small">Cours</p>
+                        <p class="text-muted small">Courses</p>
                     </div>
                     <div class="col-md-2 col-sm-4 mb-3">
                         <h4 class="text-dark">{{ stats.total_grades }}</h4>
-                        <p class="text-muted small">Notes saisies</p>
+                        <p class="text-muted small">Grades entered</p>
                     </div>
                 </div>
             </div>
