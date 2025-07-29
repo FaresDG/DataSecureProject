@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Notes - {{ child.user.first_name }}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-clipboard-data me-2"></i>Notes de {{ child.user.first_name }} {{ child.user.last_name }}</h2>
+{% if grades %}
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Matière</th>
+                <th>Note</th>
+                <th>Type</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grade in grades %}
+            <tr>
+                <td>{{ grade.course.name }}</td>
+                <td>{{ grade.grade_value }}</td>
+                <td>{{ grade.grade_type }}</td>
+                <td>{{ grade.date_recorded.strftime('%d/%m/%Y') }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted text-center">Aucune note disponible.</p>
+{% endif %}
+{% endblock %}

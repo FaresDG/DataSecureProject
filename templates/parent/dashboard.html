@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau de bord Parent{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-people me-2"></i>Bonjour {{ current_user.first_name }} !</h2>
+    <span class="badge bg-success fs-6">Parent</span>
+</div>
+
+{% if children_data %}
+<div class="row">
+    {% for child in children_data %}
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-light">
+                <strong>{{ child.student.user.first_name }} {{ child.student.user.last_name }}</strong>
+                <span class="badge bg-secondary ms-2">{{ child.student.class_name }}</span>
+            </div>
+            <div class="card-body">
+                <p><strong>Notes récentes :</strong></p>
+                {% if child.recent_grades %}
+                <ul class="list-unstyled mb-3">
+                    {% for grade in child.recent_grades %}
+                    <li>{{ grade.course.name }} : {{ grade.grade_value }}/20</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">Aucune note.</p>
+                {% endif %}
+
+                <p><strong>Absences récentes :</strong></p>
+                {% if child.recent_absences %}
+                <ul class="list-unstyled mb-0">
+                    {% for absence in child.recent_absences %}
+                    <li>{{ absence.date.strftime('%d/%m/%Y') }} - {{ absence.period }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted">Aucune absence.</p>
+                {% endif %}
+            </div>
+            <div class="card-footer text-center bg-white">
+                <a href="{{ url_for('parent.child_grades', student_id=child.student.id) }}" class="btn btn-sm btn-outline-primary me-2">Notes</a>
+                <a href="{{ url_for('parent.child_schedule', student_id=child.student.id) }}" class="btn btn-sm btn-outline-success me-2">Planning</a>
+                <a href="{{ url_for('parent.child_absences', student_id=child.student.id) }}" class="btn btn-sm btn-outline-warning">Absences</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-muted">Aucun enfant associé à ce compte.</p>
+{% endif %}
+{% endblock %}
