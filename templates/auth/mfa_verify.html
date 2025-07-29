@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Vérification MFA - Intranet Scolaire{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark text-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-shield-lock me-2"></i>
+                    Vérification de sécurité
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="alert alert-info">
+                    <i class="bi bi-envelope me-2"></i>
+                    Un code de vérification a été envoyé à votre adresse email. 
+                    Veuillez le saisir ci-dessous pour continuer.
+                </div>
+                
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.code.label(class="form-label") }}
+                        {{ form.code(class="form-control form-control-lg text-center" + (" is-invalid" if form.code.errors else ""), 
+                                     placeholder="Entrez le code à 6 chiffres", maxlength="12", autocomplete="off") }}
+                        {% if form.code.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.code.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        {{ form.remember_me(class="form-check-input") }}
+                        {{ form.remember_me.label(class="form-check-label") }}
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-warning btn-lg") }}
+                    </div>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <p class="text-muted small">
+                        <i class="bi bi-clock me-1"></i>
+                        Le code expire dans 10 minutes
+                    </p>
+                    <a href="{{ url_for('auth.login') }}" class="text-decoration-none">
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Retour à la connexion
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="alert alert-warning mt-3">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Note de développement :</strong> En mode développement, le code MFA est visible dans les logs de l'application.
+        </div>
+    </div>
+</div>
+{% endblock %}

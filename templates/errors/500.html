@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Erreur serveur - 500{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <div class="py-5">
+        <i class="bi bi-exclamation-octagon display-1 text-danger"></i>
+        <h1 class="display-4 fw-bold">500</h1>
+        <p class="lead">Une erreur interne du serveur s'est produite.</p>
+        <p class="text-muted">Nous nous excusons pour la gêne occasionnée. L'erreur a été signalée et sera corrigée rapidement.</p>
+        <div class="mt-4">
+            <a href="{{ url_for('main.index') }}" class="btn btn-primary me-2">
+                <i class="bi bi-house me-2"></i>Retour à l'accueil
+            </a>
+            <button onclick="location.reload()" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-clockwise me-2"></i>Réessayer
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

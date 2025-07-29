@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau de bord Administrateur{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-gear-fill me-2"></i>Tableau de bord Administrateur</h2>
+    <span class="badge bg-danger fs-6">Administration</span>
+</div>
+
+<!-- Statistiques globales -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h6 class="text-white-50">Total Utilisateurs</h6>
+                        <h3 class="mb-0">{{ stats.total_users }}</h3>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-people fs-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h6 class="text-white-50">Étudiants</h6>
+                        <h3 class="mb-0">{{ stats.total_students }}</h3>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-mortarboard fs-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h6 class="text-white-50">Professeurs</h6>
+                        <h3 class="mb-0">{{ stats.total_teachers }}</h3>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-journal-bookmark fs-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <h6 class="text-white-50">Cours</h6>
+                        <h3 class="mb-0">{{ stats.total_courses }}</h3>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <i class="bi bi-book fs-1"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-plus me-2"></i>
+                    Utilisateurs récents
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if recent_users %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Rôle</th>
+                                    <th>Date création</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in recent_users %}
+                                <tr>
+                                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ user.role.name }}</span>
+                                    </td>
+                                    <td>{{ user.created_at.strftime('%d/%m/%Y') }}</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if user.is_active else 'danger' }}">
+                                            {{ 'Actif' if user.is_active else 'Inactif' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center py-3">Aucun utilisateur récent</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightning me-2"></i>
+                    Actions rapides
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('admin.add_user') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-person-plus me-2"></i>
+                        Ajouter un utilisateur
+                    </a>
+                    <a href="{{ url_for('admin.add_course') }}" class="btn btn-outline-success">
+                        <i class="bi bi-journal-plus me-2"></i>
+                        Créer un cours
+                    </a>
+                    <a href="{{ url_for('admin.users') }}" class="btn btn-outline-info">
+                        <i class="bi bi-people me-2"></i>
+                        Gérer les utilisateurs
+                    </a>
+                    <a href="{{ url_for('admin.courses') }}" class="btn btn-outline-warning">
+                        <i class="bi bi-book me-2"></i>
+                        Gérer les cours
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm mt-3">
+            <div class="card-header bg-warning text-dark">
+                <h6 class="mb-0">
+                    <i class="bi bi-tools me-2"></i>
+                    Outils de développement
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid">
+                    <a href="{{ url_for('admin.init_sample_data') }}" class="btn btn-outline-warning btn-sm" 
+                       onclick="return confirm('Cela va créer des données d\'exemple. Continuer ?')">
+                        <i class="bi bi-database-add me-2"></i>
+                        Initialiser données d'exemple
+                    </a>
+                </div>
+                <p class="text-muted small mt-2">
+                    Crée des utilisateurs, cours et données de test pour développement.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistiques détaillées -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="bi bi-bar-chart me-2"></i>
+                    Statistiques détaillées
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <h4 class="text-primary">{{ stats.total_users }}</h4>
+                        <p class="text-muted small">Utilisateurs totaux</p>
+                    </div>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <h4 class="text-success">{{ stats.total_students }}</h4>
+                        <p class="text-muted small">Étudiants</p>
+                    </div>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <h4 class="text-warning">{{ stats.total_teachers }}</h4>
+                        <p class="text-muted small">Professeurs</p>
+                    </div>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <h4 class="text-info">{{ stats.total_parents }}</h4>
+                        <p class="text-muted small">Parents</p>
+                    </div>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <h4 class="text-secondary">{{ stats.total_courses }}</h4>
+                        <p class="text-muted small">Cours</p>
+                    </div>
+                    <div class="col-md-2 col-sm-4 mb-3">
+                        <h4 class="text-dark">{{ stats.total_grades }}</h4>
+                        <p class="text-muted small">Notes saisies</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
