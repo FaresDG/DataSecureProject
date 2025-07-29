@@ -122,5 +122,17 @@ def grades():
                        .join(Course)\
                        .join(Student)\
                        .order_by(Grade.date_recorded.desc()).all()
-    
-    return render_template('teacher/grades.html', grades=grades)
+
+    if grades:
+        values = [g.grade_value for g in grades]
+        average = round(sum(values) / len(values), 1)
+        best = round(max(values), 1)
+        high_count = len([v for v in values if v >= 16])
+        low_count = len([v for v in values if v <= 10])
+    else:
+        average = best = 0
+        high_count = low_count = 0
+
+    return render_template('teacher/grades.html', grades=grades,
+                           average=average, best=best,
+                           high_count=high_count, low_count=low_count)
