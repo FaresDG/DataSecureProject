@@ -70,7 +70,7 @@ class Student(db.Model):
     class_name = db.Column(db.String(50), nullable=False)
     enrollment_date = db.Column(db.Date, nullable=False)
     
-    user = db.relationship('User', backref='student_profile')
+    user = db.relationship('User', backref=db.backref('student_profile', uselist=False))
     grades = db.relationship('Grade', backref='student', lazy=True)
     absences = db.relationship('Absence', backref='student', lazy=True)
 
@@ -80,7 +80,7 @@ class Parent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     
-    user = db.relationship('User', backref='parent_profile')
+    user = db.relationship('User', backref=db.backref('parent_profile', uselist=False))
 
 class ParentStudent(db.Model):
     __tablename__ = 'parent_student'
@@ -102,7 +102,7 @@ class Teacher(db.Model):
     department = db.Column(db.String(100), nullable=False)
     hire_date = db.Column(db.Date, nullable=False)
     
-    user = db.relationship('User', backref='teacher_profile')
+    user = db.relationship('User', backref=db.backref('teacher_profile', uselist=False))
     courses = db.relationship('Course', backref='teacher', lazy=True)
 
 class Administrator(db.Model):
@@ -113,7 +113,7 @@ class Administrator(db.Model):
     employee_number = db.Column(db.String(20), unique=True, nullable=False)
     position = db.Column(db.String(100), nullable=False)
     
-    user = db.relationship('User', backref='admin_profile')
+    user = db.relationship('User', backref=db.backref('admin_profile', uselist=False))
 
 class Course(db.Model):
     __tablename__ = 'courses'
