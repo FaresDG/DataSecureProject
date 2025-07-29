@@ -8,10 +8,10 @@ def create_sample_data():
 
     # Roles
     roles = {
-        'student': 'Étudiant',
+        'student': 'Student',
         'parent': 'Parent',
-        'teacher': 'Professeur',
-        'admin': 'Administrateur'
+        'teacher': 'Teacher',
+        'admin': 'Administrator'
     }
     for rname, desc in roles.items():
         if not Role.query.filter_by(name=rname).first():
@@ -35,7 +35,7 @@ def create_sample_data():
         db.session.commit()
         admin_profile = Administrator(user_id=user.id,
                                       employee_number='ADM900',
-                                      position='Administrateur')
+                                      position='Administrator')
         db.session.add(admin_profile)
         db.session.commit()
     # Administrators
@@ -44,7 +44,7 @@ def create_sample_data():
         if not User.query.filter_by(email=email).first():
             user = User(email=email,
                         first_name=f"Admin{i}",
-                        last_name="Ecole",
+                        last_name="School",
                         role_id=admin_role.id,
                         is_active=True)
             user.set_password('admin123')
@@ -52,7 +52,7 @@ def create_sample_data():
             db.session.commit()
             admin = Administrator(user_id=user.id,
                                   employee_number=f"ADM{i:03d}",
-                                  position="Administrateur")
+                                  position="Administrator")
             db.session.add(admin)
     db.session.commit()
 
@@ -62,7 +62,7 @@ def create_sample_data():
         email = f"teacher{i}@school.fr"
         if not User.query.filter_by(email=email).first():
             user = User(email=email,
-                        first_name=f"Prof{i}",
+                        first_name=f"Teacher{i}",
                         last_name="Demo",
                         role_id=teacher_role.id,
                         is_active=True)
@@ -105,7 +105,7 @@ def create_sample_data():
         email = f"student{i}@school.fr"
         if not User.query.filter_by(email=email).first():
             user = User(email=email,
-                        first_name=f"Eleve{i}",
+                        first_name=f"Student{i}",
                         last_name="Demo",
                         role_id=student_role.id,
                         is_active=True)
@@ -211,7 +211,7 @@ def create_sample_data():
         code = f"COUR{idx:03d}"
         if not Course.query.filter_by(code=code).first():
             teacher = teachers[(idx-1) % len(teachers)]
-            course = Course(name=name, code=code, description=f"Cours de {name}", credits=1, teacher_id=teacher.id)
+            course = Course(name=name, code=code, description=f"Course on {name}", credits=1, teacher_id=teacher.id)
             db.session.add(course)
             courses.append(course)
         else:
@@ -219,7 +219,7 @@ def create_sample_data():
     db.session.commit()
 
     # Schedules (one random slot per course and class)
-    days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"]
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     time_slots = [(time(8,0), time(9,0)), (time(9,0), time(10,0)), (time(10,0), time(11,0)), (time(11,0), time(12,0))]
     for course in courses:
         for group in class_groups:
