@@ -5,26 +5,26 @@ from models import User, Role, Student, Teacher
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Mot de passe', validators=[DataRequired()])
-    remember_me = BooleanField('Se souvenir de moi')
-    submit = SubmitField('Se connecter')
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember me')
+    submit = SubmitField('Log in')
 
 class MFAForm(FlaskForm):
     # Allow codes up to 16 characters for tests and future extensions
-    code = StringField('Code de vérification', validators=[DataRequired(), Length(min=6, max=16)])
-    remember_me = BooleanField('Se souvenir de moi')
-    submit = SubmitField('Vérifier')
+    code = StringField('Verification code', validators=[DataRequired(), Length(min=6, max=16)])
+    remember_me = BooleanField('Remember me')
+    submit = SubmitField('Verify')
 
 class RegisterForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    first_name = StringField('Prénom', validators=[DataRequired(), Length(min=2, max=50)])
-    last_name = StringField('Nom', validators=[DataRequired(), Length(min=2, max=50)])
-    phone = StringField('Téléphone', validators=[Optional(), Length(max=20)])
-    password = PasswordField('Mot de passe', validators=[DataRequired(), Length(min=8)])
-    password2 = PasswordField('Confirmer le mot de passe', 
+    first_name = StringField('First name', validators=[DataRequired(), Length(min=2, max=50)])
+    last_name = StringField('Last name', validators=[DataRequired(), Length(min=2, max=50)])
+    phone = StringField('Phone', validators=[Optional(), Length(max=20)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
+    password2 = PasswordField('Confirm password',
                              validators=[DataRequired(), EqualTo('password')])
-    role_id = SelectField('Rôle', coerce=int, validators=[DataRequired()])
-    submit = SubmitField('S\'inscrire')
+    role_id = SelectField('Role', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Sign up')
     
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
@@ -33,30 +33,30 @@ class RegisterForm(FlaskForm):
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
-            raise ValidationError('Cette adresse email est déjà utilisée.')
+            raise ValidationError('This email address is already in use.')
 
 class UserForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    first_name = StringField('Prénom', validators=[DataRequired(), Length(min=2, max=50)])
-    last_name = StringField('Nom', validators=[DataRequired(), Length(min=2, max=50)])
-    phone = StringField('Téléphone', validators=[Optional(), Length(max=20)])
-    password = PasswordField('Mot de passe', validators=[Optional(), Length(min=8)])
-    role_id = SelectField('Rôle', coerce=int, validators=[DataRequired()])
-    is_active = BooleanField('Compte actif', default=True)
-    submit = SubmitField('Enregistrer')
+    first_name = StringField('First name', validators=[DataRequired(), Length(min=2, max=50)])
+    last_name = StringField('Last name', validators=[DataRequired(), Length(min=2, max=50)])
+    phone = StringField('Phone', validators=[Optional(), Length(max=20)])
+    password = PasswordField('Password', validators=[Optional(), Length(min=8)])
+    role_id = SelectField('Role', coerce=int, validators=[DataRequired()])
+    is_active = BooleanField('Active account', default=True)
+    submit = SubmitField('Save')
 
 class GradeForm(FlaskForm):
-    student_id = SelectField('Étudiant', coerce=int, validators=[DataRequired()])
-    course_id = SelectField('Matière', coerce=int, validators=[DataRequired()])
-    grade_value = FloatField('Note', validators=[DataRequired(), NumberRange(min=0, max=20)])
+    student_id = SelectField('Student', coerce=int, validators=[DataRequired()])
+    course_id = SelectField('Course', coerce=int, validators=[DataRequired()])
+    grade_value = FloatField('Grade', validators=[DataRequired(), NumberRange(min=0, max=20)])
     grade_type = SelectField('Type', choices=[
-        ('Contrôle', 'Contrôle'),
-        ('Examen', 'Examen'),
-        ('Devoir', 'Devoir'),
+        ('Test', 'Test'),
+        ('Exam', 'Exam'),
+        ('Homework', 'Homework'),
         ('Participation', 'Participation')
     ], validators=[DataRequired()])
-    comments = TextAreaField('Commentaires', validators=[Optional()])
-    submit = SubmitField('Ajouter la note')
+    comments = TextAreaField('Comments', validators=[Optional()])
+    submit = SubmitField('Add grade')
     
     def __init__(self, *args, **kwargs):
         super(GradeForm, self).__init__(*args, **kwargs)
@@ -64,16 +64,16 @@ class GradeForm(FlaskForm):
                                   for s in Student.query.join(User)]
 
 class AbsenceForm(FlaskForm):
-    student_id = SelectField('Étudiant', coerce=int, validators=[DataRequired()])
+    student_id = SelectField('Student', coerce=int, validators=[DataRequired()])
     date = DateField('Date', validators=[DataRequired()])
-    period = SelectField('Période', choices=[
-        ('Matin', 'Matin'),
-        ('Après-midi', 'Après-midi'),
-        ('Journée', 'Journée complète')
+    period = SelectField('Period', choices=[
+        ('Morning', 'Morning'),
+        ('Afternoon', 'Afternoon'),
+        ('Day', 'Full day')
     ], validators=[DataRequired()])
-    is_justified = BooleanField('Absence justifiée', default=False)
-    reason = StringField('Motif', validators=[Optional(), Length(max=200)])
-    submit = SubmitField('Enregistrer l\'absence')
+    is_justified = BooleanField('Justified absence', default=False)
+    reason = StringField('Reason', validators=[Optional(), Length(max=200)])
+    submit = SubmitField("Save absence")
     
     def __init__(self, *args, **kwargs):
         super(AbsenceForm, self).__init__(*args, **kwargs)
@@ -81,9 +81,9 @@ class AbsenceForm(FlaskForm):
                                   for s in Student.query.join(User)]
 
 class CourseForm(FlaskForm):
-    name = StringField('Nom du cours', validators=[DataRequired(), Length(max=100)])
+    name = StringField('Course name', validators=[DataRequired(), Length(max=100)])
     code = StringField('Code', validators=[DataRequired(), Length(max=20)])
     description = TextAreaField('Description', validators=[Optional()])
-    credits = IntegerField('Crédits', validators=[DataRequired(), NumberRange(min=1, max=10)])
-    teacher_id = SelectField('Professeur', coerce=int, validators=[DataRequired()])
-    submit = SubmitField('Enregistrer')
+    credits = IntegerField('Credits', validators=[DataRequired(), NumberRange(min=1, max=10)])
+    teacher_id = SelectField('Teacher', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Save')

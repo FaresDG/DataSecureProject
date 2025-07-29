@@ -43,13 +43,13 @@ class TestAuth:
         """Test que la page de connexion se charge correctement"""
         response = client.get('/auth/login')
         assert response.status_code == 200
-        assert b'Connexion' in response.data
+        assert b'Login' in response.data
 
     def test_register_page_loads(self, client):
         """Test que la page d'inscription se charge correctement"""
         response = client.get('/auth/register')
         assert response.status_code == 200
-        assert b'inscription' in response.data.lower()
+        assert b'sign up' in response.data.lower()
 
     def test_user_registration(self, client, app):
         """Test l'inscription d'un nouvel utilisateur"""
@@ -64,7 +64,7 @@ class TestAuth:
                 'password': 'testpassword123',
                 'password2': 'testpassword123',
                 'role_id': student_role.id,
-                'submit': 'S\'inscrire'
+                'submit': 'Sign up'
             })
             
             # Doit rediriger vers la page de connexion après inscription
@@ -81,7 +81,7 @@ class TestAuth:
         response = client.post('/auth/login', data={
             'email': 'invalid@example.com',
             'password': 'wrongpassword',
-            'submit': 'Se connecter'
+            'submit': 'Log in'
         })
         
         assert response.status_code == 200
@@ -105,7 +105,7 @@ class TestAuth:
         response = client.post('/auth/login', data={
             'email': 'test@example.com',
             'password': 'testpassword123',
-            'submit': 'Se connecter'
+            'submit': 'Log in'
         })
         
         # Doit rediriger vers la vérification MFA
@@ -134,7 +134,7 @@ class TestAuth:
             
         response = client.post('/auth/mfa-verify', data={
             'code': 'test_mfa_code',
-            'submit': 'Vérifier'
+            'submit': 'Verify'
         })
         
         # Doit rediriger après MFA réussi

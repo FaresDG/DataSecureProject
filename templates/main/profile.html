@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Mon Profil{% endblock %}
+{% block title %}My Profile{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="bi bi-person me-2"></i>Mon Profil</h5>
+                <h5 class="mb-0"><i class="bi bi-person me-2"></i>My Profile</h5>
             </div>
             <div class="card-body">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><strong>Prénom :</strong> {{ current_user.first_name }}</li>
-                    <li class="list-group-item"><strong>Nom :</strong> {{ current_user.last_name }}</li>
-                    <li class="list-group-item"><strong>Email :</strong> {{ current_user.email }}</li>
-                    <li class="list-group-item"><strong>Rôle :</strong> {{ current_user.role.name }}</li>
+                    <li class="list-group-item"><strong>First name:</strong> {{ current_user.first_name }}</li>
+                    <li class="list-group-item"><strong>Last name:</strong> {{ current_user.last_name }}</li>
+                    <li class="list-group-item"><strong>Email:</strong> {{ current_user.email }}</li>
+                    <li class="list-group-item"><strong>Role:</strong> {{ current_user.role.name }}</li>
                 </ul>
             </div>
         </div>

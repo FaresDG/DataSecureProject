@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Tableau de bord Parent{% endblock %}
+{% block title %}Parent Dashboard{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="bi bi-people me-2"></i>Bonjour {{ current_user.first_name }} !</h2>
+    <h2><i class="bi bi-people me-2"></i>Hello {{ current_user.first_name }}!</h2>
     <span class="badge bg-success fs-6">Parent</span>
 </div>
 
@@ -18,7 +18,7 @@
                 <span class="badge bg-secondary ms-2">{{ child.student.class_name }}</span>
             </div>
             <div class="card-body">
-                <p><strong>Notes récentes :</strong></p>
+                <p><strong>Recent grades:</strong></p>
                 {% if child.recent_grades %}
                 <ul class="list-unstyled mb-3">
                     {% for grade in child.recent_grades %}
@@ -26,10 +26,10 @@
                     {% endfor %}
                 </ul>
                 {% else %}
-                <p class="text-muted">Aucune note.</p>
+                <p class="text-muted">No grades.</p>
                 {% endif %}
 
-                <p><strong>Absences récentes :</strong></p>
+                <p><strong>Recent absences:</strong></p>
                 {% if child.recent_absences %}
                 <ul class="list-unstyled mb-0">
                     {% for absence in child.recent_absences %}
@@ -37,12 +37,12 @@
                     {% endfor %}
                 </ul>
                 {% else %}
-                <p class="text-muted">Aucune absence.</p>
+                <p class="text-muted">No absences.</p>
                 {% endif %}
             </div>
             <div class="card-footer text-center bg-white">
-                <a href="{{ url_for('parent.child_grades', student_id=child.student.id) }}" class="btn btn-sm btn-outline-primary me-2">Notes</a>
-                <a href="{{ url_for('parent.child_schedule', student_id=child.student.id) }}" class="btn btn-sm btn-outline-success me-2">Planning</a>
+                <a href="{{ url_for('parent.child_grades', student_id=child.student.id) }}" class="btn btn-sm btn-outline-primary me-2">Grades</a>
+                <a href="{{ url_for('parent.child_schedule', student_id=child.student.id) }}" class="btn btn-sm btn-outline-success me-2">Schedule</a>
                 <a href="{{ url_for('parent.child_absences', student_id=child.student.id) }}" class="btn btn-sm btn-outline-warning">Absences</a>
             </div>
         </div>
@@ -50,6 +50,6 @@
     {% endfor %}
 </div>
 {% else %}
-<p class="text-muted">Aucun enfant associé à ce compte.</p>
+<p class="text-muted">No child associated with this account.</p>
 {% endif %}
 {% endblock %}
