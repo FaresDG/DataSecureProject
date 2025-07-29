@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Mes Notes{% endblock %}
+{% block title %}My Grades{% endblock %}
 
 {% block content %}
-<h2 class="mb-4"><i class="bi bi-clipboard-data me-2"></i>Mes Notes</h2>
+<h2 class="mb-4"><i class="bi bi-clipboard-data me-2"></i>My Grades</h2>
 {% if grades %}
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Matière</th>
-                <th>Note</th>
+                <th>Subject</th>
+                <th>Grade</th>
                 <th>Type</th>
                 <th>Date</th>
             </tr>
@@ -32,6 +32,6 @@
     </table>
 </div>
 {% else %}
-<p class="text-muted">Aucune note enregistrée.</p>
+<p class="text-muted">No grades recorded.</p>
 {% endif %}
 {% endblock %}
