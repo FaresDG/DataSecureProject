@@ -76,7 +76,7 @@ def create_sample_data():
     
     # Créer des étudiants
     students_data = [
-        ('etudiant.dupont@school.fr', 'Lucas', 'Dupont', 'STU001', '6A'),
+        ('gbtexfares@gmail.com', 'Lucas', 'Dupont', 'STU001', '6A'),
         ('etudiant.moreau@school.fr', 'Emma', 'Moreau', 'STU002', '6A'),
         ('etudiant.petit@school.fr', 'Nathan', 'Petit', 'STU003', '6B')
     ]
