@@ -165,10 +165,10 @@ Après l'initialisation des données d'exemple :
 
 | Rôle | Email | Mot de passe |
 |------|--------|-------------|
-| **Administrateur** | admin@school.fr | admin123 |
-| **Professeur** | prof.martin@school.fr | teacher123 |
-| **Étudiant** | etudiant.dupont@school.fr | student123 |
-| **Parent** | parent.dupont@email.fr | parent123 |
+| **Administrateur** | ulbis047@gmail.com | admin123 |
+| **Professeur** | gbtexfares@gmail.com | teacher123 |
+| **Étudiant** | dossoufares@gmail.com | student123 |
+| **Parent** | mlalarochelle17x@gmail.com | parent123 |
 
 ## 🏗️ Architecture
 
