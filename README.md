@@ -114,7 +114,10 @@ python -c "from app import create_app; from utils.admin import create_sample_dat
 python app.py
 ```
 
-L'application sera accessible sur `http://localhost:5000`
+Par défaut, l'application écoute en HTTPS si les variables `SSL_CERT_FILE` et
+`SSL_KEY_FILE` sont définies. Elle sera alors accessible sur
+`https://localhost:5000`. Sans ces variables, le serveur utilise HTTP sur le
+même port.
 
 ## 🐳 Installation avec Docker
 
@@ -130,8 +133,8 @@ docker-compose up -d
 docker-compose exec web python -c "from utils.admin import create_sample_data; create_sample_data()"
 ```
 
-Services disponibles :
-- **Application** : http://localhost:5000
+-Services disponibles :
+- **Application** : https://localhost:5000
 - **phpMyAdmin** : http://localhost:8080
 - **MySQL** : localhost:3306
 
@@ -250,6 +253,15 @@ gunicorn -w 4 -b 0.0.0.0:5000 app:app
 server {
     listen 80;
     server_name votre-domaine.com;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name votre-domaine.com;
+
+    ssl_certificate     /etc/letsencrypt/live/votre-domaine.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/votre-domaine.com/privkey.pem;
 
     location / {
         proxy_pass http://127.0.0.1:5000;

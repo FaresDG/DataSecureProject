@@ -80,4 +80,9 @@ if __name__ == '__main__':
     app = create_app()
     with app.app_context():
         db.create_all()
-    app.run(debug=True, host='0.0.0.0', port=5000)
+
+    cert = os.environ.get('SSL_CERT_FILE')
+    key = os.environ.get('SSL_KEY_FILE')
+    ssl_ctx = (cert, key) if cert and key else None
+
+    app.run(debug=True, host='0.0.0.0', port=5000, ssl_context=ssl_ctx)
