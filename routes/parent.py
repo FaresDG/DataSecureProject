@@ -72,8 +72,23 @@ def child_schedule(student_id):
     schedules = Schedule.query.join(Course)\
                              .filter(Schedule.class_group == child.class_name)\
                              .order_by(Schedule.day_of_week, Schedule.start_time).all()
-    
-    return render_template('parent/child_schedule.html', child=child, schedules=schedules)
+
+    day_map = {
+        'Monday': 1, 'Tuesday': 2, 'Wednesday': 3,
+        'Thursday': 4, 'Friday': 5, 'Saturday': 6,
+        'Sunday': 0
+    }
+    events = [
+        {
+            'title': f"{s.course.name} ({s.classroom})",
+            'daysOfWeek': [day_map.get(s.day_of_week, 0)],
+            'startTime': s.start_time.strftime('%H:%M'),
+            'endTime': s.end_time.strftime('%H:%M')
+        }
+        for s in schedules
+    ]
+
+    return render_template('parent/child_schedule.html', child=child, events=events)
 
 @bp.route('/child/<int:student_id>/absences')
 @login_required
