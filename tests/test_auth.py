@@ -13,12 +13,12 @@ def app():
     with app.app_context():
         db.create_all()
         
-        # Créer les rôles de base
+        # Create base roles
         roles = [
-            Role(name='student', description='Étudiant'),
+            Role(name='student', description='Student'),
             Role(name='parent', description='Parent'),
-            Role(name='teacher', description='Professeur'),
-            Role(name='admin', description='Administrateur')
+            Role(name='teacher', description='Teacher'),
+            Role(name='admin', description='Administrator')
         ]
         
         for role in roles:
@@ -40,19 +40,19 @@ def runner(app):
 
 class TestAuth:
     def test_login_page_loads(self, client):
-        """Test que la page de connexion se charge correctement"""
+        """Test that the login page loads correctly"""
         response = client.get('/auth/login')
         assert response.status_code == 200
         assert b'Login' in response.data
 
     def test_register_page_loads(self, client):
-        """Test que la page d'inscription se charge correctement"""
+        """Test that the registration page loads correctly"""
         response = client.get('/auth/register')
         assert response.status_code == 200
         assert b'sign up' in response.data.lower()
 
     def test_user_registration(self, client, app):
-        """Test l'inscription d'un nouvel utilisateur"""
+        """Test registering a new user"""
         with app.app_context():
             student_role = Role.query.filter_by(name='student').first()
             
@@ -67,17 +67,17 @@ class TestAuth:
                 'submit': 'Sign up'
             })
             
-            # Doit rediriger vers la page de connexion après inscription
+            # Should redirect to the login page after registration
             assert response.status_code == 302
             
-            # Vérifier que l'utilisateur a été créé
+            # Verify that the user was created
             user = User.query.filter_by(email='test@example.com').first()
             assert user is not None
             assert user.first_name == 'Test'
             assert user.last_name == 'User'
 
     def test_user_login_invalid_credentials(self, client):
-        """Test connexion avec des identifiants invalides"""
+        """Test login with invalid credentials"""
         response = client.post('/auth/login', data={
             'email': 'invalid@example.com',
             'password': 'wrongpassword',
@@ -88,9 +88,9 @@ class TestAuth:
         assert b'incorrect' in response.data.lower()
 
     def test_user_login_valid_credentials(self, client, app):
-        """Test connexion avec des identifiants valides"""
+        """Test login with valid credentials"""
         with app.app_context():
-            # Créer un utilisateur de test
+            # Create a test user
             student_role = Role.query.filter_by(name='student').first()
             user = User(
                 email='test@example.com',
@@ -108,14 +108,14 @@ class TestAuth:
             'submit': 'Log in'
         })
         
-        # Doit rediriger vers la vérification MFA
+        # Should redirect to MFA verification
         assert response.status_code == 302
         assert '/auth/mfa-verify' in response.location
 
     def test_mfa_verification(self, client, app):
-        """Test la vérification MFA"""
+        """Test MFA verification"""
         with app.app_context():
-            # Créer un utilisateur et simuler l'état pré-MFA
+            # Create a user and simulate pre-MFA state
             student_role = Role.query.filter_by(name='student').first()
             user = User(
                 email='test@example.com',
@@ -128,7 +128,7 @@ class TestAuth:
             db.session.add(user)
             db.session.commit()
             
-        # Simuler la session pré-MFA
+        # Simulate pre-MFA session
         with client.session_transaction() as sess:
             sess['pre_auth_user_id'] = user.id
             
@@ -137,13 +137,13 @@ class TestAuth:
             'submit': 'Verify'
         })
         
-        # Doit rediriger après MFA réussi
+        # Should redirect after successful MFA
         assert response.status_code == 302
 
     def test_logout(self, client, app):
-        """Test la déconnexion"""
+        """Test logging out"""
         with app.app_context():
-            # Créer et connecter un utilisateur
+            # Create and log in a user
             student_role = Role.query.filter_by(name='student').first()
             user = User(
                 email='test@example.com',
@@ -155,19 +155,19 @@ class TestAuth:
             db.session.add(user)
             db.session.commit()
             
-        # Simuler une session active
+        # Simulate an active session
         with client.session_transaction() as sess:
             sess['_user_id'] = str(user.id)
             sess['_fresh'] = True
             
         response = client.get('/auth/logout')
         
-        # Doit rediriger vers la page d'accueil
+        # Should redirect to the home page
         assert response.status_code == 302
         assert '/' in response.location
 
     def test_password_hashing(self, app):
-        """Test que les mots de passe sont correctement hachés"""
+        """Test that passwords are hashed correctly"""
         with app.app_context():
             student_role = Role.query.filter_by(name='student').first()
             user = User(
@@ -180,15 +180,15 @@ class TestAuth:
             password = 'testpassword123'
             user.set_password(password)
             
-            # Le mot de passe ne doit pas être stocké en clair
+            # Password should not be stored in plain text
             assert user.password_hash != password
             
-            # Mais doit pouvoir être vérifié
+            # But should be verifiable
             assert user.check_password(password) is True
             assert user.check_password('wrongpassword') is False
 
     def test_role_verification(self, app):
-        """Test la vérification des rôles utilisateur"""
+        """Test user role verification"""
         with app.app_context():
             student_role = Role.query.filter_by(name='student').first()
             teacher_role = Role.query.filter_by(name='teacher').first()
@@ -200,7 +200,7 @@ class TestAuth:
                 role_id=student_role.id
             )
             
-            # Test des permissions
+            # Test permissions
             assert student_user.has_role('student') is True
             assert student_user.has_role('teacher') is False
             assert student_user.can('view_grades') is True

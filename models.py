@@ -101,7 +101,7 @@ class ParentStudent(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer, db.ForeignKey('parents.id'), nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
-    relationship_type = db.Column(db.String(50), nullable=False)  # père, mère, tuteur
+    relationship_type = db.Column(db.String(50), nullable=False)  # father, mother, guardian
     
     parent = db.relationship('Parent', backref='children')
     student = db.relationship('Student', backref='parents')
@@ -148,7 +148,7 @@ class Grade(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
     grade_value = db.Column(db.Float, nullable=False)
-    grade_type = db.Column(db.String(50), nullable=False)  # Contrôle, Examen, Devoir
+    grade_type = db.Column(db.String(50), nullable=False)  # Test, Exam, Homework
     date_recorded = db.Column(db.DateTime, default=datetime.utcnow)
     teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'), nullable=False)
     comments = db.Column(db.Text)
@@ -161,7 +161,7 @@ class Absence(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
-    period = db.Column(db.String(50), nullable=False)  # Matin, Après-midi, Journée
+    period = db.Column(db.String(50), nullable=False)  # Morning, Afternoon, Full day
     is_justified = db.Column(db.Boolean, default=False)
     reason = db.Column(db.String(200))
     teacher_id = db.Column(db.Integer, db.ForeignKey('teachers.id'), nullable=False)
@@ -174,7 +174,7 @@ class Schedule(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
-    day_of_week = db.Column(db.String(20), nullable=False)  # Lundi, Mardi, etc.
+    day_of_week = db.Column(db.String(20), nullable=False)  # Monday, Tuesday, etc.
     start_time = db.Column(db.Time, nullable=False)
     end_time = db.Column(db.Time, nullable=False)
     classroom = db.Column(db.String(50), nullable=False)

@@ -3,7 +3,7 @@ from models import db, AuthLog
 from datetime import datetime
 
 def log_auth_attempt(email, action, success, user_id=None, details=None):
-    """Enregistre une tentative d'authentification dans les logs"""
+    """Record an authentication attempt in the logs"""
     log = AuthLog(
         user_id=user_id,
         email=email,
@@ -18,7 +18,7 @@ def log_auth_attempt(email, action, success, user_id=None, details=None):
     db.session.commit()
 
 def get_client_ip():
-    """Récupère l'adresse IP du client en tenant compte des proxies"""
+    """Retrieve the client IP address accounting for proxies"""
     if request.headers.getlist("X-Forwarded-For"):
         ip = request.headers.getlist("X-Forwarded-For")[0]
     else:

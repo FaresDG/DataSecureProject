@@ -19,12 +19,12 @@ def student_required(f):
 def dashboard():
     student = current_user.student_profile
     
-    # Récupérer les dernières notes
+    # Retrieve latest grades
     recent_grades = Grade.query.filter_by(student_id=student.id)\
                               .order_by(Grade.date_recorded.desc())\
                               .limit(5).all()
     
-    # Récupérer les absences récentes
+    # Retrieve recent absences
     recent_absences = Absence.query.filter_by(student_id=student.id)\
                                   .order_by(Absence.date.desc())\
                                   .limit(5).all()
@@ -57,7 +57,7 @@ def grades():
 def schedule():
     student = current_user.student_profile
     
-    # Récupérer l'emploi du temps pour la classe de l'étudiant
+    # Get the schedule for the student's class
     schedules = Schedule.query.join(Course)\
                              .filter(Schedule.class_group == student.class_name)\
                              .order_by(Schedule.day_of_week, Schedule.start_time).all()

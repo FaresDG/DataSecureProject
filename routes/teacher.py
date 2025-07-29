@@ -20,7 +20,7 @@ def teacher_required(f):
 def dashboard():
     teacher = current_user.teacher_profile
     
-    # Récupérer les cours du professeur
+    # Retrieve the teacher's courses
     courses = Course.query.filter_by(teacher_id=teacher.id).all()
     
     # Statistiques
@@ -53,7 +53,7 @@ def course_students(course_id):
     teacher = current_user.teacher_profile
     course = Course.query.filter_by(id=course_id, teacher_id=teacher.id).first_or_404()
     
-    # Récupérer les étudiants qui ont des notes dans ce cours
+    # Retrieve students who have grades in this course
     students = Student.query.join(Grade)\
                            .filter(Grade.course_id == course_id)\
                            .distinct().all()
@@ -83,7 +83,7 @@ def add_grade():
         db.session.add(grade)
         db.session.commit()
         
-        flash('Note ajoutée avec succès !', 'success')
+        flash('Grade added successfully!', 'success')
         return redirect(url_for('teacher.courses'))
     
     return render_template('teacher/add_grade.html', form=form)
@@ -108,7 +108,7 @@ def mark_absence():
         db.session.add(absence)
         db.session.commit()
         
-        flash('Absence enregistrée avec succès !', 'success')
+        flash('Absence recorded successfully!', 'success')
         return redirect(url_for('teacher.dashboard'))
     
     return render_template('teacher/mark_absence.html', form=form)

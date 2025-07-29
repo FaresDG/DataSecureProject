@@ -14,24 +14,24 @@ def create_app(config_name='default'):
     app = Flask(__name__)
     app.config.from_object(config[config_name])
     
-    # Initialisation des extensions
+    # Initialize extensions
     db.init_app(app)
     migrate = Migrate(app, db)
     mail = Mail(app)
     csrf = CSRFProtect(app)
     
-    # Configuration Flask-Login
+    # Flask-Login configuration
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
-    login_manager.login_message = 'Veuillez vous connecter pour accéder à cette page.'
+    login_manager.login_message = 'Please log in to access this page.'
     login_manager.login_message_category = 'info'
     
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
     
-    # Configuration des logs
+    # Logging configuration
     if not app.debug and not app.testing:
         if not os.path.exists('logs'):
             os.mkdir('logs')
@@ -44,9 +44,9 @@ def create_app(config_name='default'):
         app.logger.addHandler(file_handler)
         
         app.logger.setLevel(logging.INFO)
-        app.logger.info('Intranet scolaire démarré')
+        app.logger.info('School intranet started')
     
-    # Enregistrement des blueprints
+    # Register blueprints
     from routes.auth import bp as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
     

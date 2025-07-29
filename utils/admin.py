@@ -71,7 +71,7 @@ def create_sample_data():
             db.session.commit()
             teacher = Teacher(user_id=user.id,
                               employee_number=f"TCH{i:03d}",
-                              department="Général",
+                              department="General",
                               hire_date=date.today())
             db.session.add(teacher)
             teachers.append(teacher)
@@ -91,7 +91,7 @@ def create_sample_data():
         db.session.commit()
         teacher_profile = Teacher(user_id=user.id,
                                   employee_number='TCH900',
-                                  department='Général',
+                                  department='General',
                                   hire_date=date.today())
         db.session.add(teacher_profile)
         teachers.append(teacher_profile)
@@ -194,17 +194,17 @@ def create_sample_data():
 
     # Courses
     course_names = [
-        "Français",
-        "Mathématiques",
-        "Histoire-géographie",
-        "Enseignement moral et civique",
-        "Langues vivantes",
-        "Sciences de la vie et de la Terre",
-        "Physique-chimie",
-        "Technologie",
-        "Éducation physique et sportive",
-        "Arts plastiques",
-        "Éducation musicale"
+        "French",
+        "Mathematics",
+        "History-Geography",
+        "Civics",
+        "Foreign Languages",
+        "Biology",
+        "Physics-Chemistry",
+        "Technology",
+        "Physical Education",
+        "Art",
+        "Music"
     ]
     courses = []
     for idx, name in enumerate(course_names, start=1):
@@ -239,7 +239,7 @@ def create_sample_data():
             grade = Grade(student_id=student.id,
                           course_id=course.id,
                           grade_value=round(random.uniform(5, 20), 2),
-                          grade_type="Contrôle",
+                          grade_type="Test",
                           date_recorded=datetime.utcnow(),
                           teacher_id=course.teacher_id,
                           comments="")
@@ -251,12 +251,12 @@ def create_sample_data():
         for _ in range(random.randint(0, 2)):
             absence = Absence(student_id=student.id,
                               date=date.today() - timedelta(days=random.randint(1, 30)),
-                              period='Journée',
+                              period='Day',
                               is_justified=random.choice([True, False]),
-                              reason='Maladie',
+                              reason='Illness',
                               teacher_id=random.choice(teachers).id)
             db.session.add(absence)
     db.session.commit()
 
-    print("Données de démonstration créées")
+    print("Sample data created")
 

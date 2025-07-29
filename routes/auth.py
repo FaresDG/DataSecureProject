@@ -22,21 +22,21 @@ def login():
         
         if user and user.check_password(form.password.data):
             if user.is_active:
-                # Générer et envoyer le code MFA
+                # Generate and send the MFA code
                 mfa_code = user.generate_mfa_code()
                 send_mfa_code(user.email, mfa_code)
                 
                 session['pre_auth_user_id'] = user.id
                 log_auth_attempt(user.email, 'mfa_code_sent', True, user.id)
                 
-                flash('Un code de vérification a été envoyé à votre email.', 'info')
+                flash('A verification code has been sent to your email.', 'info')
                 return redirect(url_for('auth.mfa_verify'))
             else:
-                log_auth_attempt(form.email.data, 'login_attempt', False, details='Compte désactivé')
-                flash('Votre compte a été désactivé.', 'danger')
+                log_auth_attempt(form.email.data, 'login_attempt', False, details='Account disabled')
+                flash('Your account has been disabled.', 'danger')
         else:
-            log_auth_attempt(form.email.data, 'login_attempt', False, details='Identifiants incorrects')
-            flash('Email ou mot de passe incorrect.', 'danger')
+            log_auth_attempt(form.email.data, 'login_attempt', False, details='Invalid credentials')
+            flash('Incorrect email or password.', 'danger')
     
     return render_template('auth/login.html', form=form)
 
@@ -58,14 +58,14 @@ def mfa_verify():
             session.pop('pre_auth_user_id', None)
             
             log_auth_attempt(user.email, 'login_success', True, user.id)
-            flash('Connexion réussie !', 'success')
+            flash('Login successful!', 'success')
             
             next_page = request.args.get('next')
             return redirect(next_page) if next_page else redirect(url_for('main.dashboard'))
         else:
-            log_auth_attempt(user.email if user else 'unknown', 'mfa_failed', False, 
-                           details='Code MFA incorrect')
-            flash('Code de vérification incorrect.', 'danger')
+            log_auth_attempt(user.email if user else 'unknown', 'mfa_failed', False,
+                           details='Incorrect MFA code')
+            flash('Invalid verification code.', 'danger')
     
     return render_template('auth/mfa_verify.html', form=form)
 
@@ -76,7 +76,7 @@ def logout():
         current_user.mfa_verified = False
         db.session.commit()
     logout_user()
-    flash('Vous avez été déconnecté.', 'info')
+    flash('You have been logged out.', 'info')
     return redirect(url_for('main.index'))
 
 @bp.route('/register', methods=['GET', 'POST'])
@@ -95,28 +95,28 @@ def register():
         db.session.add(user)
         db.session.commit()
         
-        flash('Inscription réussie ! Vous pouvez maintenant vous connecter.', 'success')
+        flash('Registration successful! You can now log in.', 'success')
         return redirect(url_for('auth.login'))
     
     return render_template('auth/register.html', form=form)
 
 def send_mfa_code(email, code):
-    """Envoie le code MFA par email"""
+    """Send the MFA code via email"""
     try:
         msg = Message(
-            subject='Code de vérification - Intranet Scolaire',
+            subject='Verification code - School Intranet',
             recipients=[email],
             body=f'''
-Bonjour,
+Hello,
 
-Votre code de vérification pour accéder à l'intranet scolaire est : {code}
+Your verification code to access the school intranet is: {code}
 
-Ce code expire dans 10 minutes.
+This code expires in 10 minutes.
 
-Si vous n'avez pas demandé ce code, veuillez ignorer ce message.
+If you did not request this code, please ignore this message.
 
-Cordialement,
-L'équipe de l'intranet scolaire
+Regards,
+The school intranet team
             '''
         )
         mail = current_app.extensions.get('mail')
@@ -126,5 +126,5 @@ L'équipe de l'intranet scolaire
         mail.send(msg)
         return True
     except Exception as e:
-        current_app.logger.error(f"Erreur envoi email MFA: {e}")
+        current_app.logger.error(f"Error sending MFA email: {e}")
         return False

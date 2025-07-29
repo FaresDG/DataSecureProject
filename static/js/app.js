@@ -1,19 +1,19 @@
-// JavaScript personnalisé pour l'intranet scolaire
+// Custom JavaScript for the school intranet
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialisation des tooltips Bootstrap
+    // Initialize Bootstrap tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 
-    // Initialisation des popovers Bootstrap
+    // Initialize Bootstrap popovers
     var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl);
     });
 
-    // Auto-dismiss alerts après 5 secondes
+    // Auto-dismiss alerts after 5 seconds
     setTimeout(function() {
         var alerts = document.querySelectorAll('.alert:not(.alert-permanent)');
         alerts.forEach(function(alert) {
@@ -22,11 +22,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 5000);
 
-    // Confirmation pour les actions de suppression
+    // Confirmation for delete actions
     var deleteButtons = document.querySelectorAll('[data-confirm-delete]');
     deleteButtons.forEach(function(button) {
         button.addEventListener('click', function(e) {
-            if (!confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
+            if (!confirm('Are you sure you want to delete this item?')) {
                 e.preventDefault();
             }
         });
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         card.classList.add('fade-in');
     });
 
-    // Validation côté client pour les formulaires
+    // Client-side validation for forms
     var forms = document.querySelectorAll('.needs-validation');
     forms.forEach(function(form) {
         form.addEventListener('submit', function(event) {
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Système de notification toast
+    // Toast notification system
     function showToast(message, type = 'info') {
         var toastContainer = document.getElementById('toast-container');
         if (!toastContainer) {
@@ -77,22 +77,22 @@ document.addEventListener('DOMContentLoaded', function() {
         var toast = new bootstrap.Toast(toastElement);
         toast.show();
 
-        // Supprimer l'élément après fermeture
+        // Remove element after it is closed
         toastElement.addEventListener('hidden.bs.toast', function() {
             toastElement.remove();
         });
     }
 
-    // Exposer la fonction showToast globalement
+    // Expose showToast globally
     window.showToast = showToast;
 
-    // Gestion des modals de confirmation
+    // Confirmation modal handling
     var confirmModal = document.getElementById('confirmModal');
     if (confirmModal) {
         confirmModal.addEventListener('show.bs.modal', function(event) {
             var button = event.relatedTarget;
             var action = button.getAttribute('data-action');
-            var message = button.getAttribute('data-message') || 'Êtes-vous sûr de vouloir effectuer cette action ?';
+            var message = button.getAttribute('data-message') || 'Are you sure you want to perform this action?';
             
             var modalBody = confirmModal.querySelector('.modal-body');
             var confirmButton = confirmModal.querySelector('#confirmAction');
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Recherche en temps réel dans les tableaux
+    // Real-time table search
     var searchInputs = document.querySelectorAll('[data-table-search]');
     searchInputs.forEach(function(input) {
         var tableId = input.getAttribute('data-table-search');
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Chargement lazy des images
+    // Lazy loading images
     var images = document.querySelectorAll('img[data-src]');
     var imageObserver = new IntersectionObserver(function(entries, observer) {
         entries.forEach(function(entry) {
@@ -152,12 +152,12 @@ document.addEventListener('DOMContentLoaded', function() {
         imageObserver.observe(img);
     });
 
-    // Sauvegarde automatique des formulaires (brouillon)
+    // Auto-save forms (draft)
     var autoSaveForms = document.querySelectorAll('[data-auto-save]');
     autoSaveForms.forEach(function(form) {
         var formId = form.id;
         if (formId) {
-            // Restaurer les données sauvegardées
+            // Restore saved data
             var savedData = localStorage.getItem('form_' + formId);
             if (savedData) {
                 try {
@@ -169,11 +169,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 } catch (e) {
-                    console.error('Erreur lors de la restauration des données du formulaire:', e);
+                    console.error('Error restoring form data:', e);
                 }
             }
 
-            // Sauvegarder les modifications
+            // Save changes
             form.addEventListener('input', function() {
                 var formData = new FormData(form);
                 var data = {};
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('form_' + formId, JSON.stringify(data));
             });
 
-            // Nettoyer les données sauvegardées après soumission réussie
+            // Clean saved data after successful submit
             form.addEventListener('submit', function() {
                 localStorage.removeItem('form_' + formId);
             });
@@ -191,9 +191,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Utilitaires globaux
+// Global utilities
 window.SchoolIntranet = {
-    // Formater une note avec couleur
+    // Format a grade with color
     formatGrade: function(grade, maxGrade = 20) {
         var percentage = (grade / maxGrade) * 100;
         var className = 'text-success';
@@ -207,7 +207,7 @@ window.SchoolIntranet = {
         return `<span class="${className}">${grade.toFixed(1)}/${maxGrade}</span>`;
     },
 
-    // Formater une date en français
+    // Format a date in French
     formatDate: function(dateString) {
         var date = new Date(dateString);
         return date.toLocaleDateString('fr-FR', {
@@ -217,21 +217,21 @@ window.SchoolIntranet = {
         });
     },
 
-    // Calculer la moyenne d'un tableau de notes
+    // Calculate the average of an array of grades
     calculateAverage: function(grades) {
         if (grades.length === 0) return 0;
         var sum = grades.reduce(function(a, b) { return a + b; }, 0);
         return sum / grades.length;
     },
 
-    // Afficher un loader
+    // Show a loader
     showLoader: function(element) {
         if (element) {
             element.innerHTML = '<div class="spinner-custom mx-auto"></div>';
         }
     },
 
-    // Masquer un loader
+    // Hide a loader
     hideLoader: function(element, originalContent) {
         if (element) {
             element.innerHTML = originalContent || '';
