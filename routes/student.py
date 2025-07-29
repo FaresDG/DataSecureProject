@@ -48,8 +48,21 @@ def grades():
     grades = Grade.query.filter_by(student_id=student.id)\
                        .join(Course)\
                        .order_by(Grade.date_recorded.desc()).all()
-    
-    return render_template('student/grades.html', grades=grades)
+
+    # Basic statistics for UI summary
+    if grades:
+        values = [g.grade_value for g in grades]
+        average = round(sum(values) / len(values), 1)
+        best = round(max(values), 1)
+        high_count = len([v for v in values if v >= 16])
+        low_count = len([v for v in values if v <= 10])
+    else:
+        average = best = 0
+        high_count = low_count = 0
+
+    return render_template('student/grades.html', grades=grades,
+                           average=average, best=best,
+                           high_count=high_count, low_count=low_count)
 
 @bp.route('/schedule')
 @login_required
