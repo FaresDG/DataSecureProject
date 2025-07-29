@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Étudiants - {{ course.name }}{% endblock %}
+{% block title %}Students - {{ course.name }}{% endblock %}
 
 {% block content %}
-<h2 class="mb-4"><i class="bi bi-people me-2"></i>{{ course.name }} - Étudiants</h2>
+<h2 class="mb-4"><i class="bi bi-people me-2"></i>{{ course.name }} - Students</h2>
 {% if students %}
 <div class="table-responsive">
     <table class="table table-sm">
         <thead>
             <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Classe</th>
+                <th>Last Name</th>
+                <th>First Name</th>
+                <th>Class</th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +26,6 @@
     </table>
 </div>
 {% else %}
-<p class="text-muted text-center">Aucun étudiant trouvé.</p>
+<p class="text-muted text-center">No students found.</p>
 {% endif %}
 {% endblock %}
