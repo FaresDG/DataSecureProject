@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Absences - {{ child.user.first_name }}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-calendar-x me-2"></i>Absences de {{ child.user.first_name }} {{ child.user.last_name }}</h2>
+{% if absences %}
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Période</th>
+                <th>Justifiée</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for absence in absences %}
+            <tr>
+                <td>{{ absence.date.strftime('%d/%m/%Y') }}</td>
+                <td>{{ absence.period }}</td>
+                <td>{{ 'Oui' if absence.is_justified else 'Non' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted text-center">Aucune absence enregistrée.</p>
+{% endif %}
+{% endblock %}

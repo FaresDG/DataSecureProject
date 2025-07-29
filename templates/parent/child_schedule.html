@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Planning - {{ child.user.first_name }}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-calendar3 me-2"></i>Planning de {{ child.user.first_name }} {{ child.user.last_name }}</h2>
+{% if schedules %}
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Jour</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Matière</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in schedules %}
+            <tr>
+                <td>{{ s.day_of_week }}</td>
+                <td>{{ s.start_time.strftime('%H:%M') }}</td>
+                <td>{{ s.end_time.strftime('%H:%M') }}</td>
+                <td>{{ s.course.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted text-center">Aucun planning disponible.</p>
+{% endif %}
+{% endblock %}

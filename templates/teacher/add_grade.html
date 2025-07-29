@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter une note{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-plus-circle me-2"></i>Ajouter une note</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.student_id.label(class="form-label") }}
+        {{ form.student_id(class="form-select") }}
+    </div>
+    <div class="mb-3">
+        {{ form.course_id.label(class="form-label") }}
+        {{ form.course_id(class="form-select") }}
+    </div>
+    <div class="mb-3">
+        {{ form.grade_value.label(class="form-label") }}
+        {{ form.grade_value(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.grade_type.label(class="form-label") }}
+        {{ form.grade_type(class="form-select") }}
+    </div>
+    <div class="mb-3">
+        {{ form.comments.label(class="form-label") }}
+        {{ form.comments(class="form-control", rows=3) }}
+    </div>
+    <div class="d-grid">
+        {{ form.submit(class="btn btn-primary") }}
+    </div>
+</form>
+{% endblock %}
