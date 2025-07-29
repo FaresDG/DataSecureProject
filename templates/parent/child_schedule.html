@@ -2,32 +2,29 @@
 
 {% block title %}Schedule - {{ child.user.first_name }}{% endblock %}
 
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 <h2 class="mb-4"><i class="bi bi-calendar3 me-2"></i>Schedule for {{ child.user.first_name }} {{ child.user.last_name }}</h2>
 {% if schedules %}
-<div class="table-responsive">
-    <table class="table table-sm">
-        <thead>
-            <tr>
-                <th>Day</th>
-                <th>Start</th>
-                <th>End</th>
-                <th>Subject</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for s in schedules %}
-            <tr>
-                <td>{{ s.day_of_week }}</td>
-                <td>{{ s.start_time.strftime('%H:%M') }}</td>
-                <td>{{ s.end_time.strftime('%H:%M') }}</td>
-                <td>{{ s.course.name }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+<div id="scheduleCalendar" data-events='[
+    {% for sched in schedules %}
+    {
+        "title": "{{ sched.course.name | e }} ({{ sched.classroom }})",
+        "daysOfWeek": [{{ {'Monday':1,'Tuesday':2,'Wednesday':3,'Thursday':4,'Friday':5,'Saturday':6,'Sunday':0}[sched.day_of_week] }}],
+        "startTime": "{{ sched.start_time.strftime('%H:%M') }}",
+        "endTime": "{{ sched.end_time.strftime('%H:%M') }}"
+    }{% if not loop.last %},{% endif %}
+    {% endfor %}
+]'></div>
 {% else %}
 <p class="text-muted text-center">No schedule available.</p>
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+<script src="{{ url_for('static', filename='js/schedule.js') }}"></script>
 {% endblock %}

@@ -217,3 +217,16 @@ footer {
         --dark-color: #f8f9fa;
     }
 }
+
+/* Schedule Calendar */
+#scheduleCalendar {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.fc-toolbar-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
