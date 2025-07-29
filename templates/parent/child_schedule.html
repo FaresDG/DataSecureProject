@@ -8,17 +8,8 @@
 
 {% block content %}
 <h2 class="mb-4"><i class="bi bi-calendar3 me-2"></i>Schedule for {{ child.user.first_name }} {{ child.user.last_name }}</h2>
-{% if schedules %}
-<div id="scheduleCalendar" data-events='[
-    {% for sched in schedules %}
-    {
-        "title": "{{ sched.course.name | e }} ({{ sched.classroom }})",
-        "daysOfWeek": [{{ {'Monday':1,'Tuesday':2,'Wednesday':3,'Thursday':4,'Friday':5,'Saturday':6,'Sunday':0}[sched.day_of_week] }}],
-        "startTime": "{{ sched.start_time.strftime('%H:%M') }}",
-        "endTime": "{{ sched.end_time.strftime('%H:%M') }}"
-    }{% if not loop.last %},{% endif %}
-    {% endfor %}
-]'></div>
+{% if events %}
+<div id="scheduleCalendar" data-events='{{ events | tojson | safe }}'></div>
 {% else %}
 <p class="text-muted text-center">No schedule available.</p>
 {% endif %}

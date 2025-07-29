@@ -56,13 +56,29 @@ def grades():
 @student_required
 def schedule():
     student = current_user.student_profile
-    
+
     # Get the schedule for the student's class
     schedules = Schedule.query.join(Course)\
                              .filter(Schedule.class_group == student.class_name)\
                              .order_by(Schedule.day_of_week, Schedule.start_time).all()
-    
-    return render_template('student/schedule.html', schedules=schedules)
+
+    # Convert schedule objects to a format usable by the calendar
+    day_map = {
+        'Monday': 1, 'Tuesday': 2, 'Wednesday': 3,
+        'Thursday': 4, 'Friday': 5, 'Saturday': 6,
+        'Sunday': 0
+    }
+    events = [
+        {
+            'title': f"{s.course.name} ({s.classroom})",
+            'daysOfWeek': [day_map.get(s.day_of_week, 0)],
+            'startTime': s.start_time.strftime('%H:%M'),
+            'endTime': s.end_time.strftime('%H:%M')
+        }
+        for s in schedules
+    ]
+
+    return render_template('student/schedule.html', events=events)
 
 @bp.route('/absences')
 @login_required
