@@ -7,6 +7,26 @@
     <h2><i class="bi bi-people me-2"></i>Hello {{ current_user.first_name }}!</h2>
     <span class="badge bg-success fs-6">Parent</span>
 </div>
+<div class="row mb-4">
+    <div class="col-sm-6 col-lg-4 mb-3">
+        <div class="card stats-card bg-primary text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-bar-chart-line fs-1"></i>
+                <h4>{{ global_average }}</h4>
+                <p class="mb-0">Average grade</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-4 mb-3">
+        <div class="card stats-card bg-warning text-dark">
+            <div class="card-body text-center">
+                <i class="bi bi-calendar-x fs-1"></i>
+                <h4>{{ total_absences }}</h4>
+                <p class="mb-0">Total absences</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% if children_data %}
 <div class="row">
@@ -18,22 +38,34 @@
                 <span class="badge bg-secondary ms-2">{{ child.student.class_name }}</span>
             </div>
             <div class="card-body">
-                <p><strong>Recent grades:</strong></p>
+                <p class="mb-2"><strong>Average grade:</strong> {{ child.average_grade }}/20</p>
+                <div class="progress mb-3" style="height: 6px;">
+                    {% set pct = (child.average_grade / 20 * 100) | round(0, 'floor') %}
+                    {% set bar_class = 'bg-success' if pct >= 70 else 'bg-warning' if pct >= 50 else 'bg-danger' %}
+                    <div class="progress-bar {{ bar_class }}" style="width: {{ pct }}%" role="progressbar" aria-valuenow="{{ pct }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <p class="mb-1"><strong>Recent grades:</strong></p>
                 {% if child.recent_grades %}
                 <ul class="list-unstyled mb-3">
                     {% for grade in child.recent_grades %}
-                    <li>{{ grade.course.name }} : {{ grade.grade_value }}/20</li>
+                    <li>{{ grade.course.name }} : <span class="badge bg-{{ 'success' if grade.grade_value >= 10 else 'danger' }}" data-bs-toggle="tooltip" title="Recorded on {{ grade.date_recorded.strftime('%d/%m/%Y') }}">{{ grade.grade_value }}/20</span></li>
                     {% endfor %}
                 </ul>
                 {% else %}
                 <p class="text-muted">No grades.</p>
                 {% endif %}
 
-                <p><strong>Recent absences:</strong></p>
+                <p class="mb-1"><strong>Recent absences:</strong></p>
                 {% if child.recent_absences %}
                 <ul class="list-unstyled mb-0">
                     {% for absence in child.recent_absences %}
-                    <li>{{ absence.date.strftime('%d/%m/%Y') }} - {{ absence.period }}</li>
+                    {% set status = 'success' if absence.is_justified else 'danger' %}
+                    <li>
+                        <span class="badge bg-{{ status }}" data-bs-toggle="tooltip" title="{{ absence.reason or 'No reason specified' }}">
+                            {{ absence.date.strftime('%d/%m/%Y') }} - {{ absence.period }}
+                        </span>
+                    </li>
                     {% endfor %}
                 </ul>
                 {% else %}
@@ -43,7 +75,8 @@
             <div class="card-footer text-center bg-white">
                 <a href="{{ url_for('parent.child_grades', student_id=child.student.id) }}" class="btn btn-sm btn-outline-primary me-2">Grades</a>
                 <a href="{{ url_for('parent.child_schedule', student_id=child.student.id) }}" class="btn btn-sm btn-outline-success me-2">Schedule</a>
-                <a href="{{ url_for('parent.child_absences', student_id=child.student.id) }}" class="btn btn-sm btn-outline-warning">Absences</a>
+                <a href="{{ url_for('parent.child_absences', student_id=child.student.id) }}" class="btn btn-sm btn-outline-warning me-2">Absences</a>
+                <button class="btn btn-sm btn-outline-info" aria-label="Send message" data-bs-toggle="tooltip" title="Send a message regarding this child">Message</button>
             </div>
         </div>
     </div>
