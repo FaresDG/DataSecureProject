@@ -1,4 +1,4 @@
-// Custom JavaScript for the school intranet
+// Custom JavaScript for the François Mitterrand Middle School intranet
 
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize Bootstrap tooltips

@@ -44,7 +44,7 @@ def create_app(config_name='default'):
         app.logger.addHandler(file_handler)
         
         app.logger.setLevel(logging.INFO)
-        app.logger.info('School intranet started')
+        app.logger.info('François Mitterrand Middle School intranet started')
     
     # Register blueprints
     from routes.auth import bp as auth_bp

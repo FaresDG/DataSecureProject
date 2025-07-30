@@ -1,4 +1,4 @@
-# Intranet Scolaire - Application Flask
+# François Mitterrand Middle School Intranet - Application Flask
 
 Une application web complète pour la gestion d'un intranet scolaire avec authentification multi-facteurs (MFA), gestion des rôles et fonctionnalités spécialisées pour étudiants, parents, professeurs et administration.
 
