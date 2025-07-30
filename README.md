@@ -74,12 +74,7 @@ FLUSH PRIVILEGES;
 
 ### 5. Configuration des variables d'environnement
 
-Copier le fichier exemple :
-```bash
-cp .env.example .env
-```
-
-Modifier le fichier `.env` avec vos paramètres :
+Créez un fichier `.env` à la racine du projet et renseignez les variables suivantes :
 ```bash
 # Configuration de l'application
 SECRET_KEY=votre-clé-secrète-très-sécurisée
@@ -123,10 +118,8 @@ même port.
 
 ### 1. Avec Docker Compose (recommandé)
 ```bash
-# Copier le fichier docker-compose et ajuster les variables
-cp docker-compose.yml.example docker-compose.yml
+# Démarrer les services (ajustez les variables dans `docker-compose.yml` si besoin)
 
-# Démarrer les services
 docker-compose up -d
 
 # Initialiser les données d'exemple
