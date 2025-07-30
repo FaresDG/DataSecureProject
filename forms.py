@@ -19,6 +19,21 @@ from wtforms.validators import (
     Optional,
     ValidationError,
 )
+import re
+
+
+def validate_password_strength(form, field):
+    """Ensure password has upper/lowercase letters, digits and symbols."""
+    password = field.data or ""
+    if (
+        not re.search(r"[A-Z]", password)
+        or not re.search(r"[a-z]", password)
+        or not re.search(r"\d", password)
+        or not re.search(r"[^A-Za-z0-9]", password)
+    ):
+        raise ValidationError(
+            "Password must contain uppercase, lowercase, digit and symbol."
+        )
 from models import User, Role, Student, Teacher
 
 
@@ -49,7 +64,10 @@ class RegisterForm(FlaskForm):
     phone = StringField("Phone", validators=[Optional(), Length(max=20)])
     address = StringField("Address", validators=[Optional(), Length(max=200)])
     birthdate = DateField("Birthdate", validators=[Optional()])
-    password = PasswordField("Password", validators=[DataRequired(), Length(min=8)])
+    password = PasswordField(
+        "Password",
+        validators=[DataRequired(), Length(min=8), validate_password_strength],
+    )
     password2 = PasswordField(
         "Confirm password", validators=[DataRequired(), EqualTo("password")]
     )
@@ -77,7 +95,10 @@ class UserForm(FlaskForm):
     phone = StringField("Phone", validators=[Optional(), Length(max=20)])
     address = StringField("Address", validators=[Optional(), Length(max=200)])
     birthdate = DateField("Birthdate", validators=[Optional()])
-    password = PasswordField("Password", validators=[Optional(), Length(min=8)])
+    password = PasswordField(
+        "Password",
+        validators=[Optional(), Length(min=8), validate_password_strength],
+    )
     role_id = SelectField("Role", coerce=int, validators=[DataRequired()])
     is_active = BooleanField("Active account", default=True)
     submit = SubmitField("Save")
