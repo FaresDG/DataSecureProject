@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from models import Grade, Absence, Schedule, Course
 
@@ -9,6 +9,9 @@ def student_required(f):
     def decorated_function(*args, **kwargs):
         if not current_user.has_role('student'):
             return redirect(url_for('main.dashboard'))
+        if current_user.student_profile is None:
+            flash("Votre profil étudiant n'est pas encore configuré.", 'warning')
+            return redirect(url_for('main.profile'))
         return f(*args, **kwargs)
     decorated_function.__name__ = f.__name__
     return decorated_function
