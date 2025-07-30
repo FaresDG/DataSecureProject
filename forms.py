@@ -17,6 +17,7 @@ from wtforms.validators import (
     Length,
     NumberRange,
     Optional,
+    ValidationError,
 )
 from models import User, Role, Student, Teacher
 
