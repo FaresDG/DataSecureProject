@@ -104,19 +104,19 @@ def send_mfa_code(email, code):
     """Send the MFA code via email"""
     try:
         msg = Message(
-            subject='Verification code - School Intranet',
+            subject='Verification code - François Mitterrand Middle School',
             recipients=[email],
             body=f'''
 Hello,
 
-Your verification code to access the school intranet is: {code}
+Your verification code to access the François Mitterrand Middle School intranet is: {code}
 
 This code expires in 10 minutes.
 
 If you did not request this code, please ignore this message.
 
 Regards,
-The school intranet team
+The François Mitterrand Middle School intranet team
             '''
         )
         mail = current_app.extensions.get('mail')
