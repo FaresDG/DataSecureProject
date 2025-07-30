@@ -49,6 +49,7 @@ def create_sample_data():
             birthdate=date(1980, 1, 1),
         )
         user.set_password("admin123")
+        user.avatar_filename = "Catherine_SPOOKIE.png"
         db.session.add(user)
         db.session.commit()
         admin_profile = Administrator(
@@ -124,6 +125,7 @@ def create_sample_data():
             birthdate=date(1995, 4, 11),
         )
         user.set_password("teacher123")
+        user.avatar_filename = "Thomas_LECERIER.png"
         db.session.add(user)
         db.session.commit()
         teacher_profile = Teacher(
@@ -183,6 +185,8 @@ def create_sample_data():
                 birthdate=birth,
             )
             user.set_password("student123")
+            if i == 1:
+                user.avatar_filename = "Prune_LAGUERRE.png"
             db.session.add(user)
             db.session.commit()
             profile = Student(
@@ -212,6 +216,7 @@ def create_sample_data():
             birthdate=date(2010, 11, 1),
         )
         user.set_password("student123")
+        user.avatar_filename = "Richard_LAGUERRE.png"
         db.session.add(user)
         db.session.commit()
         student_profile = Student(
@@ -267,6 +272,7 @@ def create_sample_data():
             birthdate=date(1975, 11, 1),
         )
         user.set_password("parent123")
+        user.avatar_filename = "Chauvet_LAGUERRE.png"
         db.session.add(user)
         db.session.commit()
         parent_profile = Parent(user_id=user.id)

@@ -8,14 +8,16 @@
         <div class="card h-100 shadow-sm">
             <div class="bg-primary" style="height:120px;"></div>
             <div class="card-body text-center">
-                <img src="https://via.placeholder.com/120" class="rounded-circle img-thumbnail" style="margin-top:-70px;" alt="avatar">
+                <img src="{{ url_for('static', filename='avatars/' + current_user.avatar_filename) if current_user.avatar_filename else 'https://via.placeholder.com/120' }}"
+                    class="rounded-circle img-thumbnail" style="margin-top:-70px;" alt="avatar">
                 <h4 class="mt-2">{{ current_user.first_name }} {{ current_user.last_name }}</h4>
                 <p class="text-muted">{{ current_user.email }}</p>
                 <span class="badge bg-secondary">{{ role|capitalize }}</span>
                 <hr>
                 <ul class="list-unstyled text-start">
                     <li><strong>Phone:</strong> {{ current_user.phone or 'N/A' }}</li>
-                    <li><strong>Birthdate:</strong> {{ current_user.birthdate.strftime('%d/%m/%Y') if current_user.birthdate else 'N/A' }}</li>
+                    <li><strong>Birthdate:</strong> {{ current_user.birthdate.strftime('%d/%m/%Y') if
+                        current_user.birthdate else 'N/A' }}</li>
                     <li><strong>Address:</strong> {{ current_user.address or 'N/A' }}</li>
                 </ul>
             </div>
@@ -38,7 +40,8 @@
                 {% for child in children %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     {{ child.user.first_name }} {{ child.user.last_name }} - {{ child.class_name }}
-                    <a href="{{ url_for('parent.child_grades', student_id=child.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                    <a href="{{ url_for('parent.child_grades', student_id=child.id) }}"
+                        class="btn btn-sm btn-outline-primary">View</a>
                 </li>
                 {% else %}
                 <li class="list-group-item">No child linked.</li>
