@@ -2,3 +2,18 @@ node_modules
 .env
 venv/
 __pycache__/
+
+# Ignore Python bytecode and caches
+*.py[cod]
+.pytest_cache/
+
+# Ignore local development environments and IDE settings
+.bolt/
+.DS_Store
+
+# Ignore test credentials and user-uploaded avatars
+testcredentials.txt
+Some_users_avatars/
+
+# Ignore log files
+*.log
