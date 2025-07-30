@@ -10,6 +10,7 @@ Une application web complète pour la gestion d'un intranet scolaire avec authen
 - **Protection CSRF** et validation des entrées
 - **Sessions sécurisées** avec timeout automatique
 - **Logs de sécurité** complets
+- **Réinitialisation de mot de passe par email**
 
 ### 👨‍🎓 Étudiants
 - Consultation des notes et moyennes
@@ -215,6 +216,11 @@ l'architecture des composants :
 2. Un code de vérification est envoyé par email
 3. L'utilisateur doit saisir le code pour accéder
 
+### Réinitialisation du mot de passe
+1. L'utilisateur saisit son adresse email sur `/auth/reset-request`
+2. Un lien sécurisé est envoyé par email (valide 1 heure)
+3. L'utilisateur définit un nouveau mot de passe via `/auth/reset-password/<token>`
+
 ### Gestion des Rôles (RBAC)
 - **Étudiants** : `view_grades`, `view_schedule`, `view_profile`
 - **Parents** : `view_child_grades`, `view_child_schedule`, `view_child_absences`
@@ -331,6 +337,8 @@ Pour toute question ou problème :
 - `GET /` : Page d'accueil
 - `POST /auth/login` : Connexion utilisateur
 - `POST /auth/mfa-verify` : Vérification MFA
+- `POST /auth/reset-request` : Demande de réinitialisation
+- `POST /auth/reset-password/<token>` : Définir un nouveau mot de passe
 - `GET /dashboard` : Tableau de bord (redirige selon le rôle)
 - `GET /student/*` : Interface étudiant
 - `GET /parent/*` : Interface parent
