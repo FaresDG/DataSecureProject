@@ -19,4 +19,11 @@
 - **Buttons**: `.btn` with 8px radius, primary colors.
 - **Progress Bars**: Use Bootstrap `.progress` with contextual classes.
 - **Badges**: `.badge` for status indicators.
+- **Calendar**: based on FullCalendar, responsive with Tailwind classes.
+
+## Schedule Colors
+- **Cours** : `#0d6efd`
+- **TP** : `#198754`
+- **Réunion** : `#6f42c1`
+- **Examen** : `#dc3545`
 
