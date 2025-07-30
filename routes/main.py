@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import login_required, current_user
 from models import (
     User,
@@ -49,9 +49,16 @@ def profile():
     context = {"role": role}
 
     if role == "student":
-        context["student"] = current_user.student_profile
+        student = current_user.student_profile
+        if student is None:
+            flash("Your student profile is not configured yet.", "warning")
+            return redirect(url_for("main.dashboard"))
+        context["student"] = student
     elif role == "parent":
         parent = current_user.parent_profile
+        if parent is None:
+            flash("Your parent profile is not configured yet.", "warning")
+            return redirect(url_for("main.dashboard"))
         children = (
             Student.query.join(ParentStudent)
             .filter(ParentStudent.parent_id == parent.id)
@@ -60,6 +67,9 @@ def profile():
         context["children"] = children
     elif role == "teacher":
         teacher = current_user.teacher_profile
+        if teacher is None:
+            flash("Your teacher profile is not configured yet.", "warning")
+            return redirect(url_for("main.dashboard"))
         courses = Course.query.filter_by(teacher_id=teacher.id).all()
         context["teacher"] = teacher
         context["courses"] = courses
