@@ -1,0 +1,33 @@
+<!-- Child card snippet -->
+<div class="card shadow-sm h-100">
+  <div class="card-header bg-light">
+    <strong>{{ child.student.user.first_name }} {{ child.student.user.last_name }}</strong>
+    <span class="badge bg-secondary ms-2">{{ child.student.class_name }}</span>
+  </div>
+  <div class="card-body">
+    <p class="mb-2"><strong>Average grade:</strong> {{ child.average_grade }}/20</p>
+    <div class="progress mb-3" style="height:6px;">
+      {% set pct = (child.average_grade / 20 * 100) | round(0,'floor') %}
+      {% set bar_class = 'bg-success' if pct >= 70 else 'bg-warning' if pct >= 50 else 'bg-danger' %}
+      <div class="progress-bar {{ bar_class }}" style="width:{{ pct }}%" role="progressbar"></div>
+    </div>
+    <!-- Recent grades list -->
+    <ul class="list-unstyled mb-3">
+      {% for grade in child.recent_grades %}
+      <li>{{ grade.course.name }} : <span class="badge bg-{{ 'success' if grade.grade_value >= 10 else 'danger' }}" data-bs-toggle="tooltip" title="{{ grade.date_recorded.strftime('%d/%m/%Y') }}">{{ grade.grade_value }}/20</span></li>
+      {% endfor %}
+    </ul>
+    <!-- Recent absences list -->
+    <ul class="list-unstyled mb-0">
+      {% for absence in child.recent_absences %}
+      <li><span class="badge bg-{{ 'success' if absence.is_justified else 'danger' }}" data-bs-toggle="tooltip" title="{{ absence.reason or 'No reason' }}">{{ absence.date.strftime('%d/%m/%Y') }} - {{ absence.period }}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="card-footer text-center bg-white">
+    <a href="#" class="btn btn-sm btn-outline-primary me-2">Grades</a>
+    <a href="#" class="btn btn-sm btn-outline-success me-2">Schedule</a>
+    <a href="#" class="btn btn-sm btn-outline-warning me-2">Absences</a>
+    <button class="btn btn-sm btn-outline-info">Message</button>
+  </div>
+</div>

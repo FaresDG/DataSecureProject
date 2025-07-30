@@ -25,24 +25,42 @@ def dashboard():
     
     # Statistiques pour chaque enfant
     children_data = []
+    grade_values = []
+    total_absences = 0
     for child in children:
         recent_grades = Grade.query.filter_by(student_id=child.id)\
                                   .order_by(Grade.date_recorded.desc())\
                                   .limit(3).all()
-        
+
         recent_absences = Absence.query.filter_by(student_id=child.id)\
                                       .order_by(Absence.date.desc())\
                                       .limit(3).all()
-        
+
+        all_grades = Grade.query.filter_by(student_id=child.id).all()
+        values = [g.grade_value for g in all_grades]
+        avg_grade = round(sum(values) / len(values), 1) if values else 0
+
+        absence_count = Absence.query.filter_by(student_id=child.id).count()
+
         children_data.append({
             'student': child,
             'recent_grades': recent_grades,
             'recent_absences': recent_absences,
-            'total_grades': Grade.query.filter_by(student_id=child.id).count(),
-            'total_absences': Absence.query.filter_by(student_id=child.id).count()
+            'average_grade': avg_grade,
+            'total_grades': len(all_grades),
+            'total_absences': absence_count
         })
-    
-    return render_template('parent/dashboard.html', children_data=children_data)
+
+        # Collect global stats
+        grade_values.extend(values)
+        total_absences += absence_count
+
+    global_average = round(sum(grade_values) / len(grade_values), 1) if grade_values else 0
+
+    return render_template('parent/dashboard.html',
+                           children_data=children_data,
+                           global_average=global_average,
+                           total_absences=total_absences)
 
 @bp.route('/child/<int:student_id>/grades')
 @login_required
