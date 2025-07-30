@@ -160,15 +160,27 @@ def create_sample_data():
     for i in range(1, 101):
         email = f"student{i}@school.fr"
         if not User.query.filter_by(email=email).first():
+            if i == 1:
+                # Custom student profile for Prune Laguerre
+                first_name = "Prune"
+                last_name = "LAGUERRE"
+                address = "24 rue de vaux de Foletier La Rochelle"
+                birth = date(2015, 10, 1)
+            else:
+                first_name = f"Student{i}"
+                last_name = "Demo"
+                address = "1 Student Rd"
+                birth = date(2010, 1, 1)
+
             user = User(
                 email=email,
-                first_name=f"Student{i}",
-                last_name="Demo",
+                first_name=first_name,
+                last_name=last_name,
                 role_id=student_role.id,
                 is_active=True,
                 phone="0102030405",
-                address="1 Student Rd",
-                birthdate=date(2010, 1, 1),
+                address=address,
+                birthdate=birth,
             )
             user.set_password("student123")
             db.session.add(user)
