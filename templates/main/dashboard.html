@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{# Fallback dashboard for undefined roles #}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="text-center py-5">
+    <h2>Welcome to the dashboard</h2>
+    <p class="text-muted">Your role does not have a dedicated dashboard.</p>
+</div>
+{% endblock %}
