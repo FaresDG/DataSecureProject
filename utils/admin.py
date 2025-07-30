@@ -40,12 +40,12 @@ def create_sample_data():
     if not User.query.filter_by(email="ulbis047@gmail.com").first():
         user = User(
             email="ulbis047@gmail.com",
-            first_name="Test",
-            last_name="Admin",
+            first_name="Catherine",
+            last_name="SPOOKIE",
             role_id=admin_role.id,
             is_active=True,
             phone="0102030405",
-            address="1 Admin Way",
+            address="02 route de Duclair Canteleu",
             birthdate=date(1980, 1, 1),
         )
         user.set_password("admin123")
@@ -115,13 +115,13 @@ def create_sample_data():
     if not User.query.filter_by(email="gbtexfares@gmail.com").first():
         user = User(
             email="gbtexfares@gmail.com",
-            first_name="Test",
-            last_name="Teacher",
+            first_name="Thomas",
+            last_name="LECERIER",
             role_id=teacher_role.id,
             is_active=True,
             phone="0102030405",
-            address="1 Teacher St",
-            birthdate=date(1985, 1, 1),
+            address="33 route avenue du docteur planet La Rochelle",
+            birthdate=date(1995, 4, 11),
         )
         user.set_password("teacher123")
         db.session.add(user)
@@ -191,13 +191,13 @@ def create_sample_data():
     if not User.query.filter_by(email="dossoufares@gmail.com").first():
         user = User(
             email="dossoufares@gmail.com",
-            first_name="Fares",
-            last_name="Dossou",
+            first_name="Richard",
+            last_name="LAGUERRE",
             role_id=student_role.id,
             is_active=True,
             phone="0102030405",
-            address="1 Student Rd",
-            birthdate=date(2010, 1, 1),
+            address="24 rue de vaux de Foletier La Rochelle",
+            birthdate=date(2010, 11, 1),
         )
         user.set_password("student123")
         db.session.add(user)
@@ -246,13 +246,13 @@ def create_sample_data():
     if not User.query.filter_by(email="mlalarochelle17x@gmail.com").first():
         user = User(
             email="mlalarochelle17x@gmail.com",
-            first_name="Test",
-            last_name="Parent",
+            first_name="Chauvet",
+            last_name="LAGUERRE",
             role_id=parent_role.id,
             is_active=True,
             phone="0102030405",
-            address="1 Parent Ave",
-            birthdate=date(1980, 1, 1),
+            address="24 rue de vaux de Foletier La Rochelle",
+            birthdate=date(1975, 11, 1),
         )
         user.set_password("parent123")
         db.session.add(user)
