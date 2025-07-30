@@ -1,7 +1,7 @@
 // Schedule calendar initialization using FullCalendar
 // Requires a div with id 'scheduleCalendar' and a data-events attribute
 
-document.addEventListener('DOMContentLoaded', function() {
+function initScheduleCalendar() {
   var calendarEl = document.getElementById('scheduleCalendar');
   if (!calendarEl) return;
 
@@ -27,4 +27,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   calendar.render();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initScheduleCalendar);
+} else {
+  initScheduleCalendar();
+}
