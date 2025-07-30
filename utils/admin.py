@@ -213,7 +213,7 @@ def create_sample_data():
             is_active=True,
             phone="0102030405",
             address="24 rue de vaux de Foletier La Rochelle",
-            birthdate=date(2010, 11, 1),
+            birthdate=date(2015, 11, 1),
         )
         user.set_password("student123")
         user.avatar_filename = "Richard_LAGUERRE.png"
