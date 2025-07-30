@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{# Added to provide user management page referenced by navigation and admin routes #}
+{% block title %}Manage Users{% endblock %}
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-people me-2"></i>Manage Users</h2>
+<a href="{{ url_for('admin.add_user') }}" class="btn btn-primary mb-3">Add User</a>
+{% if users.items %}
+<div class="table-responsive">
+    <table class="table table-sm" id="usersTable">
+        <thead><tr><th>Email</th><th>Name</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+        {% for user in users.items %}
+        <tr>
+            <td>{{ user.email }}</td>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+            <td>{{ user.role.name }}</td>
+            <td>{{ 'Active' if user.is_active else 'Disabled' }}</td>
+            <td>
+                <a href="{{ url_for('admin.edit_user', user_id=user.id) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <form action="{{ url_for('admin.delete_user', user_id=user.id) }}" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-sm btn-outline-danger" data-confirm-delete>Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted">No users found.</p>
+{% endif %}
+{% endblock %}
