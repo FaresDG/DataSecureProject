@@ -136,3 +136,14 @@ def grades():
     return render_template('teacher/grades.html', grades=grades,
                            average=average, best=best,
                            high_count=high_count, low_count=low_count)
+
+
+@bp.route('/absences')
+@login_required
+@teacher_required
+def absences():
+    teacher = current_user.teacher_profile
+    absences = Absence.query.filter_by(teacher_id=teacher.id)\
+                            .join(Student)\
+                            .order_by(Absence.date.desc()).all()
+    return render_template('teacher/absences.html', absences=absences)

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Recorded Absences{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-calendar-x me-2"></i>Recorded Absences</h2>
+{% if absences %}
+<div class="table-responsive">
+    <table class="table table-sm align-middle">
+        <thead>
+            <tr>
+                <th>Student</th>
+                <th>Date</th>
+                <th>Period</th>
+                <th>Justified</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for absence in absences %}
+            <tr>
+                <td>{{ absence.student.user.first_name }} {{ absence.student.user.last_name }}</td>
+                <td>{{ absence.date.strftime('%d/%m/%Y') }}</td>
+                <td>{{ absence.period }}</td>
+                <td>{{ 'Yes' if absence.is_justified else 'No' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted text-center">No absences recorded.</p>
+{% endif %}
+{% endblock %}
