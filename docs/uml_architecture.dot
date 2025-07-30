@@ -1,0 +1,50 @@
+digraph Architecture {
+  rankdir=LR;
+  node [shape=box, fontname="Helvetica"];
+
+  App [label="app.py\nFlask App Factory"];
+  Auth [label="auth blueprint\n(routes/auth.py)"];
+  Main [label="main blueprint\n(routes/main.py)"];
+  Student [label="student blueprint\n(routes/student.py)"];
+  Parent [label="parent blueprint\n(routes/parent.py)"];
+  Teacher [label="teacher blueprint\n(routes/teacher.py)"];
+  Admin [label="admin blueprint\n(routes/admin.py)"];
+  Models [label="models.py"];
+  Forms [label="forms.py"];
+  Templates [label="templates/"];
+  Static [label="static/"];
+  Utils [label="utils/"];
+  Database [label="MySQL Database", shape=cylinder];
+
+  App -> Auth;
+  App -> Main;
+  App -> Student;
+  App -> Parent;
+  App -> Teacher;
+  App -> Admin;
+
+  Auth -> Models;
+  Main -> Models;
+  Student -> Models;
+  Parent -> Models;
+  Teacher -> Models;
+  Admin -> Models;
+
+  Models -> Database;
+
+  Auth -> Forms;
+  Student -> Forms;
+  Teacher -> Forms;
+  Admin -> Forms;
+
+  Auth -> Templates;
+  Main -> Templates;
+  Student -> Templates;
+  Parent -> Templates;
+  Teacher -> Templates;
+  Admin -> Templates;
+
+  Templates -> Static;
+
+  App -> Utils;
+}

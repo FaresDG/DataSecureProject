@@ -201,6 +201,13 @@ school-intranet/
 └── docs/                 # Documentation
 ```
 
+Les diagrammes ci-dessous illustrent plus en détail le modèle de données et
+l'architecture des composants :
+
+![Modèle de données](docs/uml_data_model.svg)
+
+![Architecture applicative](docs/uml_architecture.svg)
+
 ## 🔒 Sécurité
 
 ### Authentification Multi-Facteurs (MFA)

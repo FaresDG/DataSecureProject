@@ -1,0 +1,33 @@
+digraph DataModel {
+  rankdir=LR;
+  node [shape=record, fontname="Helvetica"];
+
+  Role [label="{Role|id:int\lname:string\ldescription:string}"];
+  User [label="{User|id:int\lemail:string\lpassword_hash:string\lrole_id:int}"];
+  Student [label="{Student|id:int\luser_id:int\lstudent_number:string\lclass_name:string}"];
+  Parent [label="{Parent|id:int\luser_id:int}"];
+  ParentStudent [label="{ParentStudent|parent_id:int\lstudent_id:int\lrelationship_type:string}"];
+  Teacher [label="{Teacher|id:int\luser_id:int\lemployee_number:string}"];
+  Administrator [label="{Administrator|id:int\luser_id:int\lemployee_number:string}"];
+  Course [label="{Course|id:int\lname:string\lcode:string\lteacher_id:int}"];
+  Grade [label="{Grade|id:int\lstudent_id:int\lcourse_id:int\lteacher_id:int}"];
+  Absence [label="{Absence|id:int\lstudent_id:int\lteacher_id:int}"];
+  Schedule [label="{Schedule|id:int\lcourse_id:int}"];
+  AuthLog [label="{AuthLog|id:int\luser_id:int\lemail:string}"];
+
+  User -> Role [label="role"];
+  Student -> User [label="user"];
+  Parent -> User [label="user"];
+  ParentStudent -> Parent [label="parent"];
+  ParentStudent -> Student [label="student"];
+  Teacher -> User [label="user"];
+  Administrator -> User [label="user"];
+  Course -> Teacher [label="teacher"];
+  Grade -> Student [label="student"];
+  Grade -> Course [label="course"];
+  Grade -> Teacher [label="teacher"];
+  Absence -> Student [label="student"];
+  Absence -> Teacher [label="teacher"];
+  Schedule -> Course [label="course"];
+  AuthLog -> User [label="user"];
+}
