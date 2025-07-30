@@ -347,6 +347,20 @@ def create_sample_data():
             courses.append(Course.query.filter_by(code=code).first())
     db.session.commit()
 
+    # Ensure Thomas LECERIER has a course
+    thomas = Teacher.query.join(User).filter(User.email == "gbtexfares@gmail.com").first()
+    if thomas and not Course.query.filter_by(teacher_id=thomas.id).first():
+        special = Course(
+            name="Advanced Mathematics",
+            code="COUR900",
+            description="Course on Advanced Mathematics",
+            credits=1,
+            teacher_id=thomas.id,
+        )
+        db.session.add(special)
+        db.session.commit()
+        courses.append(special)
+
     # Schedules (one random slot per course and class)
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     time_slots = [
