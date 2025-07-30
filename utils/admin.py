@@ -48,7 +48,7 @@ def create_sample_data():
             address="02 route de Duclair Canteleu",
             birthdate=date(1980, 1, 1),
         )
-        user.set_password("admin123")
+        user.set_password("Admin123!")
         user.avatar_filename = "Catherine_SPOOKIE.png"
         db.session.add(user)
         db.session.commit()
@@ -71,7 +71,7 @@ def create_sample_data():
                 address="1 Admin Way",
                 birthdate=date(1980, 1, 1),
             )
-            user.set_password("admin123")
+            user.set_password("Admin123!")
             db.session.add(user)
             db.session.commit()
             admin = Administrator(
@@ -95,7 +95,7 @@ def create_sample_data():
                 address="1 Teacher St",
                 birthdate=date(1985, 1, 1),
             )
-            user.set_password("teacher123")
+            user.set_password("Teacher123!")
             db.session.add(user)
             db.session.commit()
             teacher = Teacher(
@@ -124,7 +124,7 @@ def create_sample_data():
             address="33 route avenue du docteur planet La Rochelle",
             birthdate=date(1995, 4, 11),
         )
-        user.set_password("teacher123")
+        user.set_password("Teacher123!")
         user.avatar_filename = "Thomas_LECERIER.png"
         db.session.add(user)
         db.session.commit()
@@ -184,7 +184,7 @@ def create_sample_data():
                 address=address,
                 birthdate=birth,
             )
-            user.set_password("student123")
+            user.set_password("Student123!")
             if i == 1:
                 user.avatar_filename = "Prune_LAGUERRE.png"
             db.session.add(user)
@@ -215,7 +215,7 @@ def create_sample_data():
             address="24 rue de vaux de Foletier La Rochelle",
             birthdate=date(2015, 11, 1),
         )
-        user.set_password("student123")
+        user.set_password("Student123!")
         user.avatar_filename = "Richard_LAGUERRE.png"
         db.session.add(user)
         db.session.commit()
@@ -249,7 +249,7 @@ def create_sample_data():
                 address="1 Parent Ave",
                 birthdate=date(1980, 1, 1),
             )
-            user.set_password("parent123")
+            user.set_password("Parent123!")
             db.session.add(user)
             db.session.commit()
             profile = Parent(user_id=user.id)
@@ -271,7 +271,7 @@ def create_sample_data():
             address="24 rue de vaux de Foletier La Rochelle",
             birthdate=date(1975, 11, 1),
         )
-        user.set_password("parent123")
+        user.set_password("Parent123!")
         user.avatar_filename = "Chauvet_LAGUERRE.png"
         db.session.add(user)
         db.session.commit()
