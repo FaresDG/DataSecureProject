@@ -33,6 +33,7 @@ def login():
                 send_mfa_code(user.email, mfa_code)
                 
                 session['pre_auth_user_id'] = user.id
+                session['mfa_code_sent_at'] = datetime.utcnow().timestamp()
                 log_auth_attempt(user.email, 'mfa_code_sent', True, user.id)
                 
                 flash('A verification code has been sent to your email.', 'info')
@@ -54,7 +55,16 @@ def mfa_verify():
     form = MFAForm()
     if form.validate_on_submit():
         user = User.query.get(session['pre_auth_user_id'])
-        
+
+        sent_at = session.get('mfa_code_sent_at')
+        if not sent_at or (datetime.utcnow().timestamp() - sent_at) > 120:
+            log_auth_attempt(user.email if user else 'unknown', 'mfa_expired', False,
+                           user.id if user else None)
+            session.pop('pre_auth_user_id', None)
+            session.pop('mfa_code_sent_at', None)
+            flash('The verification code has expired. Please log in again.', 'warning')
+            return redirect(url_for('auth.login'))
+
         if user and user.verify_mfa_code(form.code.data):
             user.mfa_verified = True
             user.last_login = datetime.utcnow()
@@ -62,6 +72,7 @@ def mfa_verify():
             
             login_user(user, remember=form.remember_me.data)
             session.pop('pre_auth_user_id', None)
+            session.pop('mfa_code_sent_at', None)
             
             log_auth_attempt(user.email, 'login_success', True, user.id)
             flash('Login successful!', 'success')
@@ -151,7 +162,7 @@ Hello,
 
 Your verification code to access the François Mitterrand Middle School intranet is: {code}
 
-This code expires in 10 minutes.
+This code expires in 2 minutes.
 
 If you did not request this code, please ignore this message.
 
