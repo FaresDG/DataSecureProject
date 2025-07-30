@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from flask import current_app
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from datetime import datetime
 import secrets
 
@@ -55,6 +57,19 @@ class User(UserMixin, db.Model):
 
     def verify_mfa_code(self, code):
         return self.mfa_secret == code
+
+    def get_reset_token(self, expires_sec=3600):
+        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        return s.dumps({'user_id': self.id})
+
+    @staticmethod
+    def verify_reset_token(token, expires_sec=3600):
+        s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token, max_age=expires_sec)
+        except (BadSignature, SignatureExpired):
+            return None
+        return User.query.get(data.get('user_id'))
 
     def has_role(self, role_name):
         """Return True if the user has the given role."""

@@ -6,7 +6,13 @@ import secrets
 from datetime import datetime
 
 from models import db, User, AuthLog
-from forms import LoginForm, MFAForm, RegisterForm
+from forms import (
+    LoginForm,
+    MFAForm,
+    RegisterForm,
+    PasswordResetRequestForm,
+    PasswordResetForm,
+)
 from utils.security import log_auth_attempt
 
 bp = Blueprint('auth', __name__)
@@ -100,6 +106,40 @@ def register():
     
     return render_template('auth/register.html', form=form)
 
+
+@bp.route('/reset-request', methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
+
+    form = PasswordResetRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_password_reset_email(user)
+        flash('If an account exists for that email, a reset link has been sent.', 'info')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/reset_request.html', form=form)
+
+
+@bp.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('main.dashboard'))
+
+    user = User.verify_reset_token(token)
+    if not user:
+        flash('The password reset link is invalid or has expired.', 'danger')
+        return redirect(url_for('auth.reset_request'))
+
+    form = PasswordResetForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been updated.', 'success')
+        return redirect(url_for('auth.login'))
+    return render_template('auth/reset_password.html', form=form)
+
 def send_mfa_code(email, code):
     """Send the MFA code via email"""
     try:
@@ -127,4 +167,37 @@ The François Mitterrand Middle School intranet team
         return True
     except Exception as e:
         current_app.logger.error(f"Error sending MFA email: {e}")
+        return False
+
+
+def send_password_reset_email(user):
+    """Send a password reset email"""
+    try:
+        token = user.get_reset_token()
+        reset_url = url_for('auth.reset_password', token=token, _external=True)
+        msg = Message(
+            subject='Password reset - François Mitterrand Middle School',
+            recipients=[user.email],
+            body=f'''
+Hello,
+
+To reset your password, click the link below:
+{reset_url}
+
+This link expires in 1 hour.
+
+If you did not request this, please ignore this email.
+
+Regards,
+The François Mitterrand Middle School intranet team
+            '''
+        )
+        mail = current_app.extensions.get('mail')
+        if not mail:
+            current_app.logger.error('Flask-Mail not initialized')
+            return False
+        mail.send(msg)
+        return True
+    except Exception as e:
+        current_app.logger.error(f"Error sending reset email: {e}")
         return False

@@ -134,6 +134,19 @@ class AbsenceForm(FlaskForm):
         ]
 
 
+class PasswordResetRequestForm(FlaskForm):
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    submit = SubmitField("Send reset link")
+
+
+class PasswordResetForm(FlaskForm):
+    password = PasswordField("New password", validators=[DataRequired(), Length(min=8)])
+    password2 = PasswordField(
+        "Confirm password", validators=[DataRequired(), EqualTo("password")]
+    )
+    submit = SubmitField("Reset password")
+
+
 class CourseForm(FlaskForm):
     name = StringField("Course name", validators=[DataRequired(), Length(max=100)])
     code = StringField("Code", validators=[DataRequired(), Length(max=20)])
