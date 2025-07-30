@@ -3,7 +3,7 @@
 {% block title %}Schedule - {{ child.user.first_name }}{% endblock %}
 
 {% block extra_css %}
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+<link href="{{ url_for('static', filename='vendor/fullcalendar/fullcalendar.min.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -16,6 +16,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+<script src="{{ url_for('static', filename='vendor/fullcalendar/fullcalendar.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/schedule.js') }}"></script>
 {% endblock %}
