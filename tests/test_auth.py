@@ -1,4 +1,9 @@
+import os
+import sys
 import pytest
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from app import create_app
 from models import db, User, Role
 from config import config
@@ -61,8 +66,8 @@ class TestAuth:
                 'first_name': 'Test',
                 'last_name': 'User',
                 'phone': '0123456789',
-                'password': 'testpassword123',
-                'password2': 'testpassword123',
+                'password': 'StrongPass1!',
+                'password2': 'StrongPass1!',
                 'role_id': student_role.id,
                 'submit': 'Sign up'
             })
@@ -75,6 +80,25 @@ class TestAuth:
             assert user is not None
             assert user.first_name == 'Test'
             assert user.last_name == 'User'
+
+    def test_registration_rejects_weak_password(self, client, app):
+        """Registration should fail with weak password"""
+        with app.app_context():
+            student_role = Role.query.filter_by(name='student').first()
+
+            response = client.post('/auth/register', data={
+                'email': 'weak@example.com',
+                'first_name': 'Weak',
+                'last_name': 'User',
+                'phone': '0123456789',
+                'password': 'weakpass',
+                'password2': 'weakpass',
+                'role_id': student_role.id,
+                'submit': 'Sign up'
+            })
+
+            assert response.status_code == 200
+            assert User.query.filter_by(email='weak@example.com').first() is None
 
     def test_user_login_invalid_credentials(self, client):
         """Test login with invalid credentials"""
@@ -98,13 +122,13 @@ class TestAuth:
                 last_name='User',
                 role_id=student_role.id
             )
-            user.set_password('testpassword123')
+            user.set_password('StrongPass1!')
             db.session.add(user)
             db.session.commit()
             
         response = client.post('/auth/login', data={
             'email': 'test@example.com',
-            'password': 'testpassword123',
+            'password': 'StrongPass1!',
             'submit': 'Log in'
         })
         
@@ -123,7 +147,7 @@ class TestAuth:
                 last_name='User',
                 role_id=student_role.id
             )
-            user.set_password('testpassword123')
+            user.set_password('StrongPass1!')
             user.mfa_secret = 'test_mfa_code'
             db.session.add(user)
             db.session.commit()
@@ -151,7 +175,7 @@ class TestAuth:
                 last_name='User',
                 role_id=student_role.id
             )
-            user.set_password('testpassword123')
+            user.set_password('StrongPass1!')
             db.session.add(user)
             db.session.commit()
             
@@ -177,7 +201,7 @@ class TestAuth:
                 role_id=student_role.id
             )
             
-            password = 'testpassword123'
+            password = 'StrongPass1!'
             user.set_password(password)
             
             # Password should not be stored in plain text
