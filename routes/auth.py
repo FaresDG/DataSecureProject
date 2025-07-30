@@ -20,7 +20,13 @@ bp = Blueprint('auth', __name__)
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.dashboard'))
+        # If the user somehow has a session but MFA was not completed,
+        # logging them out avoids an infinite redirect between the login
+        # and verification pages when reopening the site without signing out.
+        if not current_user.mfa_verified:
+            logout_user()
+        else:
+            return redirect(url_for('main.dashboard'))
     
     form = LoginForm()
     if form.validate_on_submit():

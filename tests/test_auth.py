@@ -229,3 +229,26 @@ class TestAuth:
             assert student_user.has_role('teacher') is False
             assert student_user.can('view_grades') is True
             assert student_user.can('add_grades') is False
+
+    def test_login_route_resets_invalid_mfa_state(self, client, app):
+        """Users with an active session but without MFA verification should be logged out."""
+        with app.app_context():
+            student_role = Role.query.filter_by(name='student').first()
+            user = User(
+                email='loop@example.com',
+                first_name='Loop',
+                last_name='Test',
+                role_id=student_role.id
+            )
+            user.set_password('StrongPass1!')
+            user.mfa_verified = False
+            db.session.add(user)
+            db.session.commit()
+
+        with client.session_transaction() as sess:
+            sess['_user_id'] = str(user.id)
+            sess['_fresh'] = True
+
+        response = client.get('/auth/login')
+        assert response.status_code == 200
+        assert b'Login' in response.data
