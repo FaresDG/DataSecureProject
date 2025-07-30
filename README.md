@@ -155,9 +155,9 @@ pytest tests/test_auth.py
 pytest tests/test_models.py
 ```
 
-## 📊 Comptes de Test
+## 📊 Comptes de Test *(développement uniquement)*
 
-Après l'initialisation des données d'exemple :
+Les identifiants ci-dessous sont fournis **uniquement pour le développement et les tests** après l'initialisation des données d'exemple :
 
 | Rôle | Email | Mot de passe |
 |------|--------|-------------|
