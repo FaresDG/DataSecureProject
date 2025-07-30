@@ -162,11 +162,11 @@ Les identifiants ci-dessous sont fournis **uniquement pour le développement et 
 
 | Rôle | Email | Mot de passe |
 |------|--------|-------------|
-| **Administrateur** | ulbis047@gmail.com | admin123 |
-| **Professeur** | gbtexfares@gmail.com | teacher123 |
-| **Étudiant** | dossoufares@gmail.com | student123 |
-| **Étudiant** | student1@school.fr | student123 |
-| **Parent** | mlalarochelle17x@gmail.com | parent123 |
+| **Administrateur** | ulbis047@gmail.com | Admin123! |
+| **Professeur** | gbtexfares@gmail.com | Teacher123! |
+| **Étudiant** | dossoufares@gmail.com | Student123! |
+| **Étudiant** | student1@school.fr | Student123! |
+| **Parent** | mlalarochelle17x@gmail.com | Parent123! |
 
 ## 🏗️ Architecture
 

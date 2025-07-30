@@ -44,7 +44,7 @@ class TestModels:
                 last_name='Doe',
                 role_id=student_role.id
             )
-            user.set_password('password123')
+            user.set_password('StrongPass1!')
             
             db.session.add(user)
             db.session.commit()
@@ -52,7 +52,7 @@ class TestModels:
             saved_user = User.query.filter_by(email='test@example.com').first()
             assert saved_user is not None
             assert saved_user.first_name == 'John'
-            assert saved_user.check_password('password123') is True
+            assert saved_user.check_password('StrongPass1!') is True
 
     def test_student_creation(self, app):
         """Test creating a student profile"""
@@ -65,7 +65,7 @@ class TestModels:
                 last_name='Student',
                 role_id=student_role.id
             )
-            user.set_password('password123')
+            user.set_password('StrongPass1!')
             db.session.add(user)
             db.session.commit()
             
@@ -94,7 +94,7 @@ class TestModels:
                 last_name='Teacher',
                 role_id=teacher_role.id
             )
-            user.set_password('password123')
+            user.set_password('StrongPass1!')
             db.session.add(user)
             db.session.commit()
             
@@ -124,7 +124,7 @@ class TestModels:
                 last_name='Professor',
                 role_id=teacher_role.id
             )
-            user.set_password('password123')
+            user.set_password('StrongPass1!')
             db.session.add(user)
             db.session.commit()
             
@@ -167,7 +167,7 @@ class TestModels:
                 last_name='Student',
                 role_id=student_role.id
             )
-            student_user.set_password('password123')
+            student_user.set_password('StrongPass1!')
             db.session.add(student_user)
             db.session.commit()
             
@@ -187,7 +187,7 @@ class TestModels:
                 last_name='Teacher',
                 role_id=teacher_role.id
             )
-            teacher_user.set_password('password123')
+            teacher_user.set_password('StrongPass1!')
             db.session.add(teacher_user)
             db.session.commit()
             
