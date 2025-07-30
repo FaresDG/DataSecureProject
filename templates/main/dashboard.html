@@ -3,6 +3,8 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <div class="text-center py-5">
+    <img src="{{ url_for('static', filename='avatars/' + current_user.avatar_filename) if current_user.avatar_filename else 'https://via.placeholder.com/80' }}"
+         class="rounded-circle mb-3" style="width:80px; height:80px; object-fit:cover;" alt="avatar">
     <h2>Welcome to the dashboard</h2>
     <p class="text-muted">Your role does not have a dedicated dashboard.</p>
 </div>
