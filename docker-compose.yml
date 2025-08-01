@@ -7,17 +7,17 @@ services:
       - "5000:5000"
     environment:
       - FLASK_ENV=development
-      - SECRET_KEY=your-secret-key-here
+      - SECRET_KEY=i4JE57KO9FH!
       - MYSQL_HOST=db
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=rootpassword
+      - MYSQL_USER=Fares
+      - MYSQL_PASSWORD=i4JE57KO9FH!
       - MYSQL_DB=school_intranet
       - MAIL_SERVER=smtp.gmail.com
       - MAIL_PORT=587
       - MAIL_USE_TLS=true
-      - MAIL_USERNAME=your-email@gmail.com
-      - MAIL_PASSWORD=your-app-password
-      - MAIL_DEFAULT_SENDER=your-email@gmail.com
+      - MAIL_USERNAME=dossoufares@gmail.com
+      - MAIL_PASSWORD=avoc cvcu vsyo bzqo
+      - MAIL_DEFAULT_SENDER=dossoufares@gmail.com
     depends_on:
       - db
     volumes:
@@ -28,12 +28,12 @@ services:
   db:
     image: mysql:8.0
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_ROOT_PASSWORD=i4JE57KO9FH!
       - MYSQL_DATABASE=school_intranet
-      - MYSQL_USER=appuser
-      - MYSQL_PASSWORD=apppassword
+      - MYSQL_USER=Fares
+      - MYSQL_PASSWORD=i4JE57KO9FH!
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -43,8 +43,8 @@ services:
     image: phpmyadmin/phpmyadmin
     environment:
       - PMA_HOST=db
-      - PMA_USER=root
-      - PMA_PASSWORD=rootpassword
+      - PMA_USER=Fares
+      - PMA_PASSWORD=i4JE57KO9FH!
     ports:
       - "8080:80"
     depends_on:
@@ -52,3 +52,4 @@ services:
 
 volumes:
   mysql_data:
+
